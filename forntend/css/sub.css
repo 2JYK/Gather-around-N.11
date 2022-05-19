@@ -1,0 +1,17 @@
+body,html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    list-style: none;
+    text-decoration: none;
+
+    /* box-sizing: border-box; */
+}
+
+.werp{
+    width: 100%;
+    height: auto;
+    background-image: url(./img/gather.jpg);
+    min-height: 100%;
+     background-size: cover;
+}
