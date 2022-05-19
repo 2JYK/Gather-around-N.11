@@ -1,4 +1,6 @@
-### Ai - Gather-around-N.11
+# Ai Project
+### Gather-around-N.11
+#### 모여봐요 11조
 ***
 ## 팀원
 - 김경수
