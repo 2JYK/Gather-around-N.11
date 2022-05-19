@@ -1,17 +1,40 @@
-body,html {
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
     height: 100%;
     list-style: none;
     text-decoration: none;
-
-    /* box-sizing: border-box; */
 }
 
-.werp{
+body {
     width: 100%;
     height: auto;
+    /* 배경 이미지 */
     background-image: url(./img/gather.jpg);
     min-height: 100%;
-     background-size: cover;
+    background-size: cover;
+}
+
+.logo {
+    position: absolute;
+    top: 160px;
+    left: 430px;
+}
+
+.a {
+    display: flex;
+    float: right;
+
+    background-color: wheat;
+    width: 80px;
+    height: 80px;
+
+    font-size: 14px;
+    align-items: center;
+    transition: all 1s linear;
 }
