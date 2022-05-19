@@ -12,11 +12,12 @@
     - 참고
   
 ![image](https://user-images.githubusercontent.com/89643366/169194210-7acb7256-91e9-43cd-b02f-8fbf30b829d6.png)  
-        ```jsx
+        
+	```jsx
         main(master) : 테스트 서버에서 테스트가 끝나고 운영서버로 배포 할 수 있는 브랜치
         feature : 기능을 개발하는 브랜치
         hotfix  : 운영중인 버전에서 발생한 버그를 수정 하는 브랜치
-        ```
+	```
         
 
 - 브랜치
