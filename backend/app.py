@@ -29,9 +29,8 @@ def authorize(f):
         return f(user)
     return decorated_function
 
+
     # ㅡㅡㅡ 회원가입 ㅡㅡㅡ
-
-
 @app.route("/sub", methods=["POST"])
 def sign_up():
 
@@ -69,9 +68,8 @@ def sign_up():
     db.user.insert_one(doc)
     return jsonify({'message': '저장완료'}), 201
 
+
     # ㅡㅡㅡ 로그인 ㅡㅡㅡ
-
-
 @app.route("/login", methods=["POST"])
 def login():
     data = json.loads(request.data)
@@ -99,6 +97,8 @@ def login():
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
     return jsonify({'message': '로그인 성공!', 'token': token})
+
+
 
 
 if __name__ == '__main__':

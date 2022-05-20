@@ -20,6 +20,7 @@ body {
     background-size: cover;
 }
 
+/* 로고 */
 .logo {
     position: absolute;
     top: 160px;
@@ -32,6 +33,7 @@ body {
     } 
 }
 
+/* 날씨 아이콘 */
 .weather {
     display: flex;
     float: right;
@@ -52,6 +54,7 @@ body {
     cursor: pointer;
 }
 
+/* 로그인,회원가입 창 */
 .loginbox {
     display: flex;
     float: right;
