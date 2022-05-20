@@ -20,8 +20,6 @@ async function signup() {
 }
 
 
-
-
 async function login() {
     const loginData = {
         id: document.getElementById("floatingInput").value,
@@ -35,7 +33,7 @@ async function login() {
 
     if (response.status == 200) {
         alert('환영합니다!')
-        // window.location.replace(`http://127.0.0.1:5500/main.html`);
+        window.location.replace(`http://127.0.0.1:5500/main.html`);
     } else {
         alert('아이디와 비밀번호를 다시 입력해주세요.')
     }
