@@ -1,10 +1,14 @@
+const backend_base_url = "http://127.0.0.1:5000"
+const frontend_base_url = "http://127.0.0.1:5500"
+
+// 회원가입
 async function signup() {
     const signData = {
         id: document.getElementById("floatingInput").value,
         password: document.getElementById("floatingPassword").value
     }
 
-    const response = await fetch("http://127.0.0.1:5000/sub", {
+    const response = await fetch(`${backend_base_url}/sub`, {
         method: "POST",
         body: JSON.stringify(signData)
     })
@@ -19,27 +23,25 @@ async function signup() {
     }
 }
 
-
+// 로그인
 async function login() {
     const loginData = {
         id: document.getElementById("floatingInput").value,
         password: document.getElementById("floatingPassword").value
     }
 
-    const response = await fetch("http://127.0.0.1:5000/login", {
+    const response = await fetch(`${backend_base_url}/login`, {
         method: "POST",
         body: JSON.stringify(loginData)
     })
 
     if (response.status == 200) {
         alert('환영합니다!')
-        window.location.replace(`http://127.0.0.1:5500/main.html`);
+        window.location.replace(`${frontend_base_url}/main.html`);
     } else {
         alert('아이디와 비밀번호를 다시 입력해주세요.')
     }
 
     response_json = await response.json()
-    console.log(response_json)
     localStorage.setItem("token", response_json.token)
 }
-
