@@ -43,7 +43,6 @@ body {
 .icon {
     width: 70px;
     height: 70px;
-
 }
 
 .loginbox {
@@ -68,21 +67,4 @@ body {
     align-items: center;
     flex-direction: column;
 
-}
-
-.email,
-password {
-    width: 250px;
-    height: 30px;
-    margin: 5px;
-}
-
-.buttons {
-    display: flex;
-    justify-content: row;
-}
-
-.signup,
-login {
-    margin: 10px;
 }
