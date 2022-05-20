@@ -12,3 +12,19 @@ function controlHidden() {
 
 //     form_data.append("title_give", title)
 //     form_data.append("file_give", file)
+
+
+const backend_base_url = 'http://127.0.0.1:5000'
+
+async function posting() {
+    const imageData = {
+        image: document.getElementById('image').value
+    }
+    console.log(imageData)
+
+    const response = await fetch(`${backend_base_url}/upload`, {
+        method: "POST",
+        body: JSON.stringify(imageData)
+    })
+    console.log(response)
+}
