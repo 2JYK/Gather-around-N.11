@@ -20,12 +20,20 @@ body {
     background-size: cover;
 }
 
+/* 로고 */
 .logo {
     position: absolute;
     top: 160px;
     left: 430px;
 }
 
+@media screen and (max-width:1000px) { 
+    .logo { 
+        display: none; 
+    } 
+}
+
+/* 날씨 아이콘 */
 .weather {
     display: flex;
     float: right;
@@ -37,24 +45,57 @@ body {
 
     font-size: 14px;
     align-items: center;
-    transition: all 1s linear;    
+    transition: all 1s linear;
 }
+
 .icon {
-    width : 70px;
+    width: 70px;
     height: 70px;
-
+    cursor: pointer;
 }
 
+/* 로그인,회원가입 창 */
 .loginbox {
     display: flex;
     float: right;
+    flex-direction: column;
 
-    background-color: red;
     width: 500px;
     height: 500px;
-    margin: 250px 0px 0px 0px;
+    margin: 150px 0px 0px 0px;
+    border-radius: 10px;
 
     font-size: 14px;
     align-items: center;
-    
+    justify-content: center;
+}
+
+.innerbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.form-control {
+    width: 450px;
+    /* margin: 10px; */
+
+}
+
+.btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-right: 100px;
+}
+
+.btns>div {
+    margin: 5px;
+    width: 200px;
+
+}
+
+.btn {
+    margin: 10px;
 }
