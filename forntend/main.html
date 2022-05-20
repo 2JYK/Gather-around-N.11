@@ -11,30 +11,34 @@
 </head>
 
 <body>
-    <!-- controls 오디오 조정 하는 창 나중에 뺄 것  -->
-    <audio autoplay loop controls id="audio">
-        오디오를 지원하지 않는 브라우저
-        <source src="/forntend/css/img/gather.mp3" type="audio/mp3">
-    </audio>
-    
     <div class="container" id="container">
         <div class="content" id="content">
-            <h2>Content</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec mollis nulla. Phasellus lacinia
-                tempus mauris eu laoreet. Proin gravida velit dictum dui consequat malesuada. Aenean et nibh eu purus
-                scelerisque aliquet nec non justo. Aliquam vitae aliquet ipsum. Etiam condimentum varius purus ut
-                ultricies. Mauris id odio pretium, sollicitudin sapien eget, adipiscing risus.</p>
+            <div id="upload">
+                <div class="image">물고기 사진</div>
+                <div class="posting">
+                    <input type="file" id="file">
+                    <button onclick="posting()">업로드</button>
+                </div>
+            </div>
+            <!-- <img class="hidden" src="/css/img/{{ img_info.img }}"> -->
         </div>
+
         <div class="sidebar" id="sidebar">
             <h2>Sidebar</h2>
             <ul>
-                <li><div id="nameKr"><span id="nameEn"></span></div></li>
+                <li>
+                    <div id="nameKr"><span id="nameEn"></span></div>
+                </li>
                 <li>Ipsum</li>
                 <li>Dolor</li>
             </ul>
         </div>
     </div>
-
+    <!-- controls 오디오 조정 하는 창 나중에 뺄 것  -->
+    <audio autoplay loop controls id="audio">
+        오디오를 지원하지 않는 브라우저
+        <source src="/forntend/css/img/gather.mp3" type="audio/mp3">
+    </audio>
 </body>
 
 </html>
