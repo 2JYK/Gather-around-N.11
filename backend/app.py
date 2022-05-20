@@ -50,7 +50,7 @@ def sign_up():
     }
     
     db.user.insert_one(doc)
-    return jsonify({'message':'저장완료'})  
+    return jsonify({'message':'저장완료'}), 201 
 
 
 
@@ -85,9 +85,6 @@ def login():
     print('86번줄 :', token)
 
     return jsonify({'message':'로그인 성공!','token':token})
-
-
-
 
 
 
