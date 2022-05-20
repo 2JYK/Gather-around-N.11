@@ -12,11 +12,11 @@ html {
 }
 
 body {
-    width: 100%;
-    height: auto;
+    /* height: auto; */
     /* 배경 이미지 */
     background-image: url(./img/around.jpg);
     background-size: cover;
+    background-attachment: fixed;
 }
 
 .container {
@@ -34,7 +34,7 @@ body {
     margin: 20px 10px 20px 0px;
     float: left;
     border: 1px solid #bcbcbc;
-    flex: 1 1 100px;
+    flex: 1 1 200px;
     position: sticky;
 }
 
@@ -44,7 +44,7 @@ body {
     margin: 20px 0px 20px 10px;
     float: right;
     border: 1px solid #bcbcbc;
-    flex: 1 1 100px;
+    flex: 1 1 200px;
 }
 
 @media (max-width: 341px) {
