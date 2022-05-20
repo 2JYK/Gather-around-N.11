@@ -34,9 +34,20 @@ body {
     flex-wrap : wrap;
 }
 .image {
-    border : 1px solid #bbbbbb;
+    border : 1px solid #bcbcbc;
     flex-wrap : wrap;
+    width: 400px;
+    height: 400px;
+    margin-bottom: 20px;
     /* display : grid; */
+}
+.uploadBox {
+    
+    /* margin-top: 20px; */
+    /* position:relative;
+    margin-left: 50%; */
+    /* margin-left: auto; */
+
 }
 .hidden {
     display : none;
