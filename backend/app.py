@@ -5,6 +5,8 @@ from pymongo import MongoClient
 import jwt, hashlib
 from datetime import datetime, timedelta
 
+SECRET_KEY = "abcd"
+
 app = Flask(__name__)
 cors = CORS(app, resources={r'*': {'origins': '*'}})
 client = MongoClient('localhost', 27017)
@@ -43,12 +45,50 @@ def sign_up():
 
 # ㅡㅡㅡ db에 저장 ㅡㅡㅡ
     doc = {
-        'ID' : id,
-        'Pw' : password_hash
+        'id' : id,
+        'password' : password_hash
     }
     
     db.user.insert_one(doc)
-    return jsonify({'message':'저장완료'})    
+    return jsonify({'message':'저장완료'})  
+
+
+
+# ㅡㅡㅡ 로그인 ㅡㅡㅡ
+@app.route("/login", methods=["POST"])    
+
+def login():
+    data = json.loads(request.data)
+
+    id = data.get('id')
+    password = data.get('password')
+    print(password)
+    hashed_pw = hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+    result = db.user.find_one({
+        'id' : id,
+        'password' : hashed_pw
+    })
+
+
+    if result is None:
+        return jsonify({'message' : '아이디와 비밀번호가 옳바르지 않습니다.'}), 401
+
+# ㅡㅡㅡ 토큰에 싣을 정보 ㅡㅡㅡ
+    payload = {
+        'id': str(result['_id']),
+        'exp': datetime.utcnow() + timedelta(seconds=60*60*24) #로그인 24시간 유지
+    }
+
+# ㅡㅡㅡ 토큰발행 ㅡㅡㅡ
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    print('86번줄 :', token)
+
+    return jsonify({'message':'로그인 성공!','token':token})
+
+
+
+
 
 
 
