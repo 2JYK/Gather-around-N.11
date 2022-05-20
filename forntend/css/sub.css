@@ -37,10 +37,11 @@ body {
 
     font-size: 14px;
     align-items: center;
-    transition: all 1s linear;    
+    transition: all 1s linear;
 }
+
 .icon {
-    width : 70px;
+    width: 70px;
     height: 70px;
 
 }
@@ -48,13 +49,40 @@ body {
 .loginbox {
     display: flex;
     float: right;
+    flex-direction: column;
 
-    background-color: red;
     width: 500px;
     height: 500px;
     margin: 250px 0px 0px 0px;
+    border-radius: 10px;
 
     font-size: 14px;
     align-items: center;
-    
+    justify-content: center;
+    border: solid 2px;
+
+}
+
+.innerbox {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.email,
+password {
+    width: 250px;
+    height: 30px;
+    margin: 5px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: row;
+}
+
+.signup,
+login {
+    margin: 10px;
 }

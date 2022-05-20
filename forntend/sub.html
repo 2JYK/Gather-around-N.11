@@ -15,12 +15,30 @@
 
 <body>
     <div class="wrap">
-        <div class="weather"> 
-            <img class="icon" src="/css/img/sun4.png" onclick="location.href='https://www.weather.go.kr/w/ocean/forecast/daily-forecast.do';">
+        <div class="weather">
+            <img class="icon" src="/css/img/sun4.png"
+                onclick="location.href='https://www.weather.go.kr/w/ocean/forecast/daily-forecast.do'" ;>
         </div>
-        <div class="loginbox"></div>
+        <div class="loginbox">
+            <div class="innerbox">
+                <div>
+                    <input class="email" type="email" placeholder="Email">
+                </div>
+                <div>
+                    <input class="Password" placeholder="Password">
+                </div>
+            </div>
+            <div class="buttons">
+                <div class="signup">
+                    <button>회원가입</button>
+                </div>
+                <div class="login">
+                    <button>로그인</button>
+                </div>
+            </div>
+        </div>
         <img src="./css/img/logo.png" alt="logo" class="logo">
-        
+
         <audio autoplay loop controls id="audio">
             오디오를 지원하지 않는 브라우저
             <source src="/frontend/css/img/aronud.mp3" type="audio/mp3">
