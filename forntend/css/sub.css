@@ -26,6 +26,12 @@ body {
     left: 430px;
 }
 
+@media screen and (max-width:1000px) { 
+    .logo { 
+        display: none; 
+    } 
+}
+
 .weather {
     display: flex;
     float: right;
@@ -58,8 +64,6 @@ body {
     font-size: 14px;
     align-items: center;
     justify-content: center;
-
-
 }
 
 .innerbox {
