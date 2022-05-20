@@ -7,7 +7,6 @@
     flex-wrap: wrap;
 }
 
-
 .content {
     width: 580px;
     padding: 20px;
@@ -27,14 +26,7 @@
     flex: 1 1 100px;
 }
 
-/* #jb-footer {
-    clear: both;
-    padding: 20px;
-    border: none;
-    /* flex: 1 1 100px; */
-}
-
-*/ @media (max-width: 341px) {
+@media (max-width: 341px) {
     .container {
         width: auto;
     }
