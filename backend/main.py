@@ -33,7 +33,32 @@ def upload_image():
     db.image.insert_one(doc)
 
     return jsonify({'msg': 'success'})
+# ######################
+# @app.route("/article", methods=["GET"])
+# def get_article():
+#     articles = list(db.article.find())  
+#     # print(articles) 
+#     for article in articles:
+#         # print(article.get("title")) 
+#         article["_id"] = str(article["_id"])
+#     return jsonify({'msg':'success', 'articles':articles})
+    
+####################
 
+@app.route("/upload", methods=['GET'])
+# @authorize
+def show_image():   # ()안에 user
+    image = list(db.image.find())[-1] #54번의 임시버전
+    print(image)
+    
+    # image = db.image.find_one({'_id': ObjectId(user.get('id'))}) #실험
+    # image = db.image.find({'_id': ObjectId(user.get('id'))})[-1] 
+    # image = db.image.find_one()[-1] 
+    # image = db.image.find()[-1] 
+    # image = list(db.image.find())[-1]
+    # image = list(db.image.find({'_id': ObjectId(user.get('id'})) #실험
+    image["_id"] = str(image["_id"])
+    return jsonify({'msg': '성공', 'image':image})
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
