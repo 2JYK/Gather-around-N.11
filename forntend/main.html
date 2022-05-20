@@ -11,6 +11,12 @@
 </head>
 
 <body>
+    <div class="header">
+        <div class="weather">
+            <img class="icon" src="/css/img/sun4.png"
+                onclick="location.href='https:/www.weather.go.kr/w/ocean/forecast/daily-forecast.do';">
+        </div>
+    </div>
     <div class="container" id="container">
         <div class="content" id="content">
             <div id="upload">
@@ -24,15 +30,15 @@
         </div>
 
         <div class="sidebar" id="sidebar">
-            <h2>Sidebar</h2>
             <ul>
-                <li>
-                    <div id="nameKr"><span id="nameEn"></span></div>
-                </li>
-                <li>Ipsum</li>
-                <li>Dolor</li>
+                <li id="nameKr">한글이름<span id="nameEn">영어이름</span></li>
+                <li id="habitat">서식지</li>
+                <li id="desc">설명</li>
             </ul>
         </div>
+    </div>
+    <div class="footer">
+        <button class="myFish" onclick="myFish()">내가 잡은 물고기</button>
     </div>
     <!-- controls 오디오 조정 하는 창 나중에 뺄 것  -->
     <audio autoplay loop controls id="audio">

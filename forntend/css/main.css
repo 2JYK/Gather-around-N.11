@@ -1,72 +1,123 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    margin : 0;
+    padding : 0;
+    box-sizing : border-box;
 }
-
-body,
-html {
-    height: 100%;
-    list-style: none;
-    text-decoration: none;
-}
-
+/* 배경 이미지 */
 body {
-    /* height: auto; */
-    /* 배경 이미지 */
-    background-image: url(./img/around.jpg);
-    background-size: cover;
-    background-attachment: fixed;
+    background-image : url(./img/around.jpg);
+    background-size : cover;
+    background-attachment : fixed;
 }
+
 
 .container {
-    width: 940px;
-    margin: 10px auto;
-    padding: 20px;
-    border: 1px solid #bcbcbc;
-    display: flex;
-    flex-wrap: wrap;
+    width : 940px;
+    margin : 10px auto;
+    padding : 20px;
+    border : 1px solid #bcbcbc;
+    display : flex;
+    flex-wrap : wrap;
 }
 
+/* div 물고기 사진 포스팅하고, 보여지는 곳 */
 .content {
-    width: 580px;
-    padding: 20px;
-    margin: 20px 10px 20px 0px;
-    float: left;
-    border: 1px solid #bcbcbc;
-    flex: 1 1 200px;
-    position: sticky;
-    background-color: white;
-}
+    width : 580px;
+    padding : 20px;
+    margin : 20px 0px 20px 0px;
+    float : left;
+    border : 1px solid #bcbcbc;
+    flex : 1 1 200px;
+    background-color : white;
 
-.sidebar {
-    width: 260px;
-    padding: 20px;
-    margin: 20px 0px 20px 10px;
-    float: right;
-    border: 1px solid #bcbcbc;
-    flex: 1 1 200px;
-    background-color: white;
+    display : flex;
+    flex-wrap : wrap;
 }
-
+.image {
+    border : 1px solid #bbbbbb;
+    flex-wrap : wrap;
+    /* display : grid; */
+}
 .hidden {
-    display: none;
+    display : none;
 }
 
+/* div 내용영역  & li:이름&서식지&설명 */
+.sidebar {
+    width : 260px;
+    padding : 20px;
+    margin : 20px 0px 20px 10px;
+    float : right;
+    border : 1px solid #bcbcbc;
+    flex : 1 1 200px;
+    background-color : white;
+}
+
+.sidebar li {
+    width : 400px;
+    margin : 10px auto;
+    padding : 20px;
+    border : 1px solid #bcbcbc;
+    display : flex;
+    flex-wrap : wrap;
+    overflow : auto; /* 내용이 넘치면 자동 내려가게함 */
+}
+
+/* 날씨 */
+.header {
+    display : flex;
+    flex-wrap : wrap;
+}
+
+.weather {
+    right : 20px;
+    top : 20px;
+    font-size : 14px;
+    align-items : center;
+    padding : 20px;
+    /* border: 1px solid #bcbcbc; */
+}
+
+.icon {
+    width : 70px;
+    height : 70px;
+}
+
+/* 내가 잡은 물고기 */
+.footer {
+    width : 940px;
+    margin : 10px auto;
+    padding : 20px;
+    border : 1px solid #bcbcbc;
+    display : flex;
+    flex-wrap : wrap;
+}
+
+/* 반응형 */
+/* 사이즈 더 안줄이게 하는 법 없을까요? 일정 기준 멈추기?*/
 @media (max-width: 341px) {
     .container {
-        width: auto;
+        width : auto;
     }
 
-    .content {
-        float: none;
-        width: auto;
-        margin: 0px 0px 10px 0px;
+    .content .sidebar {
+        float : none;
+        width : auto;
+        margin : 0px 0px 10px 0px;
     }
 
-    .sidebar {
-        float: none;
-        width: auto;
-        margin: 0px 0px 10px 0px;
+    .sidebar li {
+        float : none;
+        width : auto;
+        margin : 0px 0px 10px 0px;
     }
+    .footer {
+        float : none;
+        width : auto;
+        margin : 0px 0px 10px 0px;
+    }
+    .header {
+        display : none;
+    }
+
 }
