@@ -28,3 +28,7 @@ async function posting() {
     })
     console.log(response)
 }
+
+function myFish(){
+    window.location.replace(`${frontend_base_url}/dairy`);
+}
