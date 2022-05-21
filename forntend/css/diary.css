@@ -10,10 +10,6 @@
 
 
 /* 전역 태그 */
-h1 {
-    font-size: 48px;
-    font-weight: 100;
-}
 
 .contents {
     font-size: 24px;
@@ -46,10 +42,21 @@ h1 {
 .intro-text {
     width: 100%;
     text-align: center;
+    padding-top: 2%;
 }
 
-.intro-text > h1,h4{
+.intro-img {
+    display: inline-block;
+    background-image: url(./img/wood.png);
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.intro-img > h1{
     color: #fff;
+    display: inline;
 }
 
 .information {
@@ -79,13 +86,13 @@ h1 {
 
 .main-text0 {
     width: 100%;
-    height: 601px;
     margin-top: -132px;
     background: #F1F2F3;
 }
 
 .main-text0 > h1 {
     padding-top: 116px;
+    font-size: 48px;
     text-align: center;
     font-weight: bold;
 }
@@ -98,13 +105,39 @@ h1 {
 /* 포스트 카드 */
 .post-card {
     display: flex;
-    width: 1280px;
+    width: 80%;
     margin: auto;
+    display: grid;
+    align-items: center;
+    text-align: center;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+
+    @media screen and (max-width: 718px) {
+      gap: 3px;
+    }
 }
 
 .post-card > li {
     flex: 1;
     height: auto;
-    margin-top: 49px;
+    margin: 20% auto auto 10%;
     text-align: center;
+} 
+
+.card-img {
+    /* width: 30.8vh; */
+    height: 190px;
+    background-size: cover;
+    background-position: center;
+}
+
+/* 글자수 제한 */
+.card-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    height: 72px;
 }
