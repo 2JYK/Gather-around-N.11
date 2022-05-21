@@ -16,19 +16,28 @@ function controlHidden() {
 
 const backend_base_url = 'http://127.0.0.1:5000'
 
-async function posting() {
-    const imageData = {
-        image: document.getElementById('image').value
-    }
-    console.log(imageData)
+function posting() {
+    let image = $('#inputImage')[0].files[0]
+    // let title = $('#upload-title').val()
+    let form_data = new FormData()
 
-    const response = await fetch(`${backend_base_url}/upload`, {
-        method: "POST",
-        body: JSON.stringify(imageData)
-    })
-    console.log(response)
+    form_data.append("image_give", image)
+    console.log(form_data);
+    // form_data.append("title_give", title)
+
+    $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:5000/upload",
+        data: form_data,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            alert(response["result"])
+        }
+    });
 }
 
-function myFish(){
+function myFish() {
     window.location.replace(`${frontend_base_url}/dairy`);
 }
