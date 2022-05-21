@@ -1,11 +1,13 @@
 from functools import wraps
 import json
+from bson import ObjectId
 from flask import Flask, request, jsonify, abort
 from flask_cors import CORS
 from pymongo import MongoClient
 import jwt
 import hashlib
 from datetime import datetime, timedelta
+
 
 SECRET_KEY = "abcd"
 
@@ -97,6 +99,39 @@ def login():
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
     return jsonify({'message': '로그인 성공!', 'token': token})
+
+# ㅡㅡㅡ Diary 유저 정보 확인 ㅡㅡㅡ
+@app.route("/getuserinfo", methods=["GET"])
+@authorize
+def get_user_info(user):
+    result = db.user.find_one({
+        "_id": ObjectId(user["id"])
+    })
+    print("110번재:",result)
+
+    return jsonify({"message":"success", "id": result["id"]})
+
+# ㅡㅡㅡ 게시판 api 시작 ㅡㅡㅡ
+@app.route("/dairy", methods=["GET"])
+@authorize
+def get_article(user):
+    articles = list(db.article.find())
+    for article in articles:
+        article["_id"] = str(article["_id"])
+
+    return jsonify({"message":"success", "articles":articles})
+
+# ㅡㅡㅡ 게시판 삭제 ㅡㅡㅡ
+
+
+
+
+
+
+
+
+
+
 
 
 
