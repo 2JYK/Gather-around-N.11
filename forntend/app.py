@@ -1,25 +1,107 @@
-from datetime import datetime, timedelta
 from functools import wraps
+import json
+from flask import Flask, request, jsonify, abort
+from flask_cors import CORS
+from pymongo import MongoClient
+import jwt
+from bson import ObjectId
 import os
 from pathlib import Path
-from bson import ObjectId
-from pymongo import MongoClient
-from flask import Flask, abort, jsonify, request
 import hashlib
-import json
-from flask_cors import CORS
-import jwt
+from datetime import datetime, timedelta
 
+SECRET_KEY = "abcd"
 
 app = Flask(__name__)
-# 현재는 테스트 서버에서 돌려서 origins에 모든 것을 다 받아오는 *를 썼지만, 나중에 서비스를 하게 된다면 원하는 프론트에서만 받도록 설정해야 함
-cors = CORS(app, resources={r"*": {"origins": "*"}})
+cors = CORS(app, resources={r'*': {'origins': '*'}})
 client = MongoClient('localhost', 27017)
-db = client.fish
+db = client.gather
 
-SECRET_KEY = 'turtle'
+    # ㅡㅡㅡ 전역함수 ㅡㅡㅡ
+# 로컬 저장소에 토큰 값 저장하는 함수
+def authorize(f):
+    @wraps(f)
+    def decorated_function():
+        if not 'Authorization' in request.headers:
+            abort(401)
+        token = request.headers['Authorization']
+        try:
+            user = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        except:
+            abort(401)
+        return f(user)
+    return decorated_function
 
 
+    # ㅡㅡㅡ 회원가입 ㅡㅡㅡ
+@app.route("/sub", methods=["POST"])
+def sign_up():
+
+    data = json.loads(request.data)
+    id_receive = data.get('id')
+    password_receive = data.get('password')
+
+# ㅡㅡㅡ 아이디 ㅡㅡㅡ
+    if id_receive == '':
+        return jsonify({'message': '아이디를 기입해 주세요'})
+    elif db.user.find_one({'id': id_receive}):
+        return jsonify({'message': '존재하는 아이디 입니다'})
+    elif len(str(id_receive)) >= 6:
+        id = id_receive
+    else:
+        return jsonify({'message': '아이디를 6자리 이상 입력해 주세요'})
+
+
+# ㅡㅡㅡ 패스워드 ㅡㅡㅡ
+    if password_receive == '':
+        return jsonify({'message': '비밀번호 입력해 주세요'})
+    elif len(str(password_receive)) >= 8:
+        password = password_receive
+    else:
+        return jsonify({'message': '비밀번호를 8자리 이상 입력해 주세요'})
+
+    password_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+# ㅡㅡㅡ db에 저장 ㅡㅡㅡ
+    doc = {
+        'id': id,
+        'password': password_hash
+    }
+
+    db.user.insert_one(doc)
+    return jsonify({'message': '저장완료'}), 201
+
+
+    # ㅡㅡㅡ 로그인 ㅡㅡㅡ
+@app.route("/login", methods=["POST"])
+def login():
+    data = json.loads(request.data)
+
+    id = data.get('id')
+    password = data.get('password')
+
+    hashed_pw = hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+    result = db.user.find_one({
+        'id': id,
+        'password': hashed_pw
+    })
+
+    if result is None:
+        return jsonify({'message': '아이디와 비밀번호가 옳바르지 않습니다.'}), 401
+
+# ㅡㅡㅡ 토큰에 싣을 정보 ㅡㅡㅡ
+    payload = {
+        'id': str(result['_id']),
+        'exp': datetime.utcnow() + timedelta(seconds=60*60*24)  # 로그인 24시간 유지
+    }
+
+# ㅡㅡㅡ 토큰발행 ㅡㅡㅡ
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+
+    return jsonify({'message': '로그인 성공!', 'token': token})
+
+# ㅡㅡㅡ 메인페이지 사진 업로드 ㅡㅡㅡ
 @app.route("/upload", methods=['POST'])
 def upload_image():
     image = request.files['image_give']
@@ -44,65 +126,11 @@ def upload_image():
         # 'user_id': user
     }
     db.image.insert_one(doc)
-    return jsonify({'result': 'success'})
+    return jsonify({'result': 'success'})   
 
-# @app.route("/upload", methods=['POST'])
-# def upload_image():
-#     data = json.loads(request.data)
-
-#     image_receive = data.get('image')
-#     if image_receive == '':
-#         return jsonify({'msg': 'No image'})
-#     else:
-#         image = request.files['image_receive']
-#         # 확장자 추출
-#         extension = image.filename.split('.')[-1]
-#         # 지금 시간 추출
-#         today = datetime.now()
-#         # 파일명이 겹치지 않도록 하기 위해 날짜를 입력해준다!
-#         mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
-#         filename = f'{mytime}'
-#         save_to = f'/css/img/{filename}.{extension}'
-#         # 파일 저장!
-#         image.save(save_to)
-#         print(image)
-
-#     # user = db.user.find_one({'_id': ObjectId(user['id'])})
-
-#     doc = {
-#         'image': image,
-#         # 'user_id': user
-#     }
-#     db.image.insert_one(doc)
-
-#     return jsonify({'msg': 'success'})
-# ######################
-# @app.route("/article", methods=["GET"])
-# def get_article():
-#     articles = list(db.article.find())
-#     # print(articles)
-#     for article in articles:
-#         # print(article.get("title"))
-#         article["_id"] = str(article["_id"])
-#     return jsonify({'msg':'success', 'articles':articles})
-
-####################
+# ㅡㅡㅡ 메인페이지 사진 보여주기 ㅡㅡㅡ
 
 
-@app.route("/upload", methods=['GET'])
-# @authorize
-def show_image():   # ()안에 user
-    image = list(db.image.find())[-1]  # 54번의 임시버전
-    print(image)
-
-    # image = db.image.find_one({'_id': ObjectId(user.get('id'))}) #실험
-    # image = db.image.find({'_id': ObjectId(user.get('id'))})[-1]
-    # image = db.image.find_one()[-1]
-    # image = db.image.find()[-1]
-    # image = list(db.image.find())[-1]
-    # image = list(db.image.find({'_id': ObjectId(user.get('id'})) #실험
-    image["_id"] = str(image["_id"])
-    return jsonify({'msg': '성공', 'image': image})
 
 
 if __name__ == '__main__':
