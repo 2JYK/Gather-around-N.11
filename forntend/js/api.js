@@ -45,31 +45,52 @@ async function login() {
     response_json = await response.json()
     localStorage.setItem("token", response_json.token)
 }
+// 유저 아이디 받아오기
+async function getName() {
 
-// diary 불러오기
-async function getArticles() {
-    const response = await fetch(`${backend_base_url}/diary`, {
-        method: 'GET'
-    }
-    )
-
-    response_json = await response.json()
-
-    return response_json.articles
-}
-
-// diary 삭제
-async function deleteArticle() {
-    const response = await fetfch(`${backend_base_url}/diary`, {
+    const response = await fetch(`${backend_base_url}/getuserinfo`, {
         headers: {
             'Authorization': localStorage.getItem("token")
-        },
-        method: 'DELETE'
+        }
     }
     )
 
     if (response.status == 200) {
-        window.location.reload;
+        response_json = await response.json()
+        // console.log(response_json)
+        return response_json.id
+    }
+    else {
+        return null
     }
 
 }
+
+
+// // diary 불러오기
+// async function getArticles() {
+//     const response = await fetch(`${backend_base_url}/diary`, {
+//         method: 'GET'
+//     }
+//     )
+
+//     response_json = await response.json()
+
+//     return response_json.articles
+// }
+
+// // diary 삭제
+// async function deleteArticle() {
+//     const response = await fetfch(`${backend_base_url}/diary`, {
+//         headers: {
+//             'Authorization': localStorage.getItem("token")
+//         },
+//         method: 'DELETE'
+//     }
+//     )
+
+//     if (response.status == 200) {
+//         window.location.reload;
+//     }
+
+// }
