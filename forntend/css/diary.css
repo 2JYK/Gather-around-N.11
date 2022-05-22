@@ -141,3 +141,11 @@
     -webkit-box-orient: vertical;
     height: 72px;
 }
+
+.card-delete {
+    cursor: pointer;
+    float: right;
+    font-size: 25px;
+    padding-right: 3%;
+    color: #af3333;
+}

@@ -24,7 +24,7 @@
     <div class="intro-bg">
       <div class="intro-text">
         <div class="intro-img">
-        <h1>{{user}}님의 게시판</h1>
+        <h1 id="user_name"></h1>
       </div>
       </div>
     </div>
@@ -58,7 +58,9 @@
         <div class="card" style="width: 18rem;">
           <div class="card-img" style="background-image:
           url(./css/img/2317622.jpg);">
-
+          <div class="card-delete" onclick="removeArticle()">
+            X
+          </div>
           </div>
           <div class="card-body">
             <hr>
@@ -76,7 +78,10 @@
           <div class="card-img"
             style="background-image:
           url(https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/4arX/image/DHloABYw4_ebABaTjuANmoLNHTc.jpg);">
-          </div>
+          <div class="card-delete" onclick="removeArticle()">
+            X
+          </div>  
+        </div>
           <div class="card-body">
             <hr>
             <h5 class="card-title">금붕어</h5>
@@ -93,6 +98,9 @@
         <div class="card" style="width: 18rem;">
           <div class="card-img" style="background-image: 
           url(https://i.ytimg.com/vi/KP0UF-xe0Sk/mqdefault.jpg);">
+          <div class="card-delete" onclick="removeArticle()">
+            X
+          </div>
           </div>
           <div class="card-body">
             <hr>
@@ -110,6 +118,9 @@
         <div class="card" style="width: 18rem;">
           <div class="card-img" style="background-image:
           url(http://www.prfish.com/shop/data/goods/160628937821m0.jpg);">
+          <div class="card-delete" onclick="removeArticle()">
+            X
+          </div>
           </div>
           <div class="card-body">
             <hr>
@@ -127,6 +138,9 @@
           <div class="card-img"
             style="background-image:
           url(https://img.hani.co.kr/imgdb/resize/2019/0630/00501050_20190630.JPG);">
+          <div class="card-delete" onclick="removeArticle()">
+            X
+          </div>
           </div>
           <div class="card-body">
             <hr>
@@ -144,6 +158,9 @@
           <div class="card-img"
             style="background-image:
           url(https://img6.yna.co.kr/etc/inner/KR/2021/07/19/AKR20210719112000009_06_i_P4.jpg);">
+          <div class="card-delete" onclick="removeArticle()">
+            X
+          </div>
           </div>
           <div class="card-body">
             <hr>
@@ -161,6 +178,9 @@
           <div class="card-img"
             style="background-image:
           url(https://img.hankyung.com/photo/202102/AKR20210224063900530_01_i_P4.jpg);">
+          <div class="card-delete" onclick="removeArticle()">
+            X
+          </div>
           </div>
           <div class="card-body">
             <hr>
