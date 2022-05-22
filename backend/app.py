@@ -122,8 +122,14 @@ def get_article(user):
     return jsonify({"message":"success", "articles":articles})
 
 # ㅡㅡㅡ 게시판 삭제 ㅡㅡㅡ
-
-
+@app.route("/dairy", methods=['DELETE'])
+@authorize
+def delete_article(user,article_id):
+    article = db.article.delete_one(
+        {"_id":ObjectId(article_id), "user":user["id"]}
+    )
+    if article.deleted_count:
+        return jsonify({"mesage":"success"})
 
 
 
