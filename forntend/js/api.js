@@ -45,3 +45,31 @@ async function login() {
     response_json = await response.json()
     localStorage.setItem("token", response_json.token)
 }
+
+// diary 불러오기
+async function getArticles() {
+    const response = await fetch(`${backend_base_url}/diary`, {
+        method: 'GET'
+    }
+    )
+
+    response_json = await response.json()
+
+    return response_json.articles
+}
+
+// diary 삭제
+async function deleteArticle() {
+    const response = await fetfch(`${backend_base_url}/diary`, {
+        headers: {
+            'Authorization': localStorage.getItem("token")
+        },
+        method: 'DELETE'
+    }
+    )
+
+    if (response.status == 200) {
+        window.location.reload;
+    }
+
+}
