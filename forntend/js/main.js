@@ -1,3 +1,11 @@
+console.log('메인페이지') //연결 확인
+console.log(localStorage.getItem("token"))  // 토큰값 확인
+function myFish() {
+    window.location.replace(`${frontend_base_url}/diary.html`);
+}
+// 경로 이동확인
+
+
 function controlHidden() {
     const show = document.getElementById("uploadPhoto");
     const upload = document.getElementById("showPhoto");
@@ -38,6 +46,13 @@ function posting() {
     });
 }
 
-function myFish() {
-    window.location.replace(`${frontend_base_url}/dairy`);
+async function show_image() {
+    const response = await fetch(`${backend_base_url}/show`, {
+        method: "GET"
+    })
+
+    response_json = await response.json()
+    console.log(response_json)
+
+    return response_json.image
 }

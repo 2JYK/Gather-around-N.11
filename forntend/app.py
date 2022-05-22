@@ -102,36 +102,62 @@ def login():
     return jsonify({'message': '로그인 성공!', 'token': token})
 
 # ㅡㅡㅡ 메인페이지 사진 업로드 ㅡㅡㅡ
+
+
 @app.route("/upload", methods=['POST'])
-def upload_image():
-    image = request.files['image_give']
+@authorize
+def upload_image(user):
+    data = json.loads(request.data)
+    print(data)
+    # image = request.files['image_give']
 
-    extension = image.filename.split('.')[-1]
-    today = datetime.now()
-    mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
-    filename = f'{mytime}'
+    # extension = image.filename.split('.')[-1]
+    # today = datetime.now()
+    # mytime = today.strftime('%Y-%M-%D-%H-%M-%S')
+    # filename = f'{mytime}'
 
-    save_to = f'/css/img/fish/{filename}.{extension}'
-    test = os.path.abspath(__file__)
-    print(test)
-    parent_path = Path(test).parent
-    abs_path = str(parent_path) + save_to
+    # save_to = f'/css/img/fish/{filename}.{extension}'
+    # test = os.path.abspath(__file__)
+    # print(test)
+    # parent_path = Path(test).parent
+    # abs_path = str(parent_path) + save_to
 
-    image.save(abs_path)
+    # image.save(abs_path)
 
-    # user = db.user.find_one({'_id': ObjectId(user['id'])})
+    # # user = db.user.find_one({'_id': ObjectId(user['id'])})
 
-    doc = {
-        'image': abs_path,
-        # 'user_id': user
-    }
-    db.image.insert_one(doc)
-    return jsonify({'result': 'success'})   
+    # doc = {
+    #     'image': abs_path,
+    #     # 'user_id': user
+    # }
+    # db.image.insert_one(doc)
+    # return jsonify({'result': 'success'})   
 
 # ㅡㅡㅡ 메인페이지 사진 보여주기 ㅡㅡㅡ
 
 
+# ㅡㅡㅡ Diary 유저 정보 확인 ㅡㅡㅡ
+@app.route("/getuserinfo", methods=["GET"])
+@authorize
+def get_user_info(user):
+    result = db.user.find_one({
+        "_id": ObjectId(user["id"])
+    })
+    print("110번재:",result)
 
+    return jsonify({"message":"success", "id": result["id"]})
+
+# ㅡㅡㅡ 게시판 api 시작 ㅡㅡㅡ
+@app.route("/dairy", methods=["GET"])
+@authorize
+def get_article(user):
+    articles = list(db.article.find())
+    for article in articles:
+        article["_id"] = str(article["_id"])
+
+    return jsonify({"message":"success", "articles":articles})
+
+# ㅡㅡㅡ 게시판 삭제 ㅡㅡㅡ
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    app.run('127.0.0.1', port=5000, debug=True)
