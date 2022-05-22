@@ -47,7 +47,6 @@ async function login() {
 }
 // 유저 아이디 받아오기
 async function getName() {
-
     const response = await fetch(`${backend_base_url}/getuserinfo`, {
         headers: {
             'Authorization': localStorage.getItem("token")
@@ -63,7 +62,6 @@ async function getName() {
     else {
         return null
     }
-
 }
 
 

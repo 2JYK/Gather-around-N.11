@@ -1,10 +1,5 @@
 //user id 보여주기
-async function loadId() {
-    console.log("here")
 
-    const userid = await getArticles()
-}
-loadId()
 
 // //게시글 보여주기(이름, 설명, 사진)
 // async function loadArticles() {
@@ -23,3 +18,13 @@ loadId()
 // }
 
 // loadArticles(article_id)
+
+
+async function checkLogin() {
+    const name = await getName();
+    
+    const username = document.getElementById("user_name")
+    username.innerText = name
+};
+
+checkLogin()
