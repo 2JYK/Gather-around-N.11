@@ -22,7 +22,6 @@ function controlHidden() {
 //     form_data.append("file_give", file)
 
 
-const backend_base_url = 'http://127.0.0.1:5000'
 
 function posting() {
     let image = $('#inputImage')[0].files[0]
@@ -41,13 +40,23 @@ function posting() {
         contentType: false,
         processData: false,
         success: function (response) {
-            alert(response["result"])
+            console.log(response)
+            // alert(response["abs_path"])
+
+            const abs_path = response["abs_path"]
+            console.log(abs_path)
+            const image = document.getElementById("image")
+
+            // response_json = await response.json()
+            // console.log(response_json.abs_path)
+
+            image[0].style.backgroundImage = "url(/" + abs_path + ")"
         }
     });
 }
 
 async function show_image() {
-    const response = await fetch(`${backend_base_url}/show`, {
+    const response = await fetch(`${backend_base_url}/upload`, {
         method: "GET"
     })
 

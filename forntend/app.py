@@ -17,23 +17,26 @@ cors = CORS(app, resources={r'*': {'origins': '*'}})
 client = MongoClient('localhost', 27017)
 db = client.gather
 
-    # ㅡㅡㅡ 전역함수 ㅡㅡㅡ
+# ㅡㅡㅡ 전역함수 ㅡㅡㅡ
 # 로컬 저장소에 토큰 값 저장하는 함수
-def authorize(f):
-    @wraps(f)
-    def decorated_function():
-        if not 'Authorization' in request.headers:
-            abort(401)
-        token = request.headers['Authorization']
-        try:
-            user = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
-        except:
-            abort(401)
-        return f(user)
-    return decorated_function
 
 
-    # ㅡㅡㅡ 회원가입 ㅡㅡㅡ
+# def authorize(f):
+#     @wraps(f)
+#     def decorated_function():
+#         if not 'Authorization' in request.headers:
+#             abort(401)
+#         token = request.headers['Authorization']
+#         try:
+#             user = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+#         except:
+#             abort(401)
+#         return f(user)
+#     return decorated_function
+
+# ㅡㅡㅡ 회원가입 ㅡㅡㅡ
+
+
 @app.route("/sub", methods=["POST"])
 def sign_up():
 
@@ -71,8 +74,9 @@ def sign_up():
     db.user.insert_one(doc)
     return jsonify({'message': '저장완료'}), 201
 
-
     # ㅡㅡㅡ 로그인 ㅡㅡㅡ
+
+
 @app.route("/login", methods=["POST"])
 def login():
     data = json.loads(request.data)
@@ -105,59 +109,60 @@ def login():
 
 
 @app.route("/upload", methods=['POST'])
-@authorize
-def upload_image(user):
-    data = json.loads(request.data)
-    print(data)
-    # image = request.files['image_give']
+# @authorize
+def upload_image():
+    image = request.files['image_give']
 
-    # extension = image.filename.split('.')[-1]
-    # today = datetime.now()
-    # mytime = today.strftime('%Y-%M-%D-%H-%M-%S')
-    # filename = f'{mytime}'
+    extension = image.filename.split('.')[-1]
+    today = datetime.now()
+    mytime = today.strftime('%Y%m%d%H%M%S')
+    filename = f'{mytime}'
 
-    # save_to = f'/css/img/fish/{filename}.{extension}'
-    # test = os.path.abspath(__file__)
-    # print(test)
-    # parent_path = Path(test).parent
-    # abs_path = str(parent_path) + save_to
+    save_to = f'/css/img/fish/{filename}.{extension}'
+    test = os.path.abspath(__file__)
+    parent_path = Path(test).parent
+    abs_path = str(parent_path) + save_to
+    print(abs_path)
 
-    # image.save(abs_path)
+    image.save(abs_path)
 
-    # # user = db.user.find_one({'_id': ObjectId(user['id'])})
+    # user = db.user.find_one({'_id': ObjectId(user['id'])})
+    # user_id = str(user['_id'])
 
-    # doc = {
-    #     'image': abs_path,
-    #     # 'user_id': user
-    # }
-    # db.image.insert_one(doc)
-    # return jsonify({'result': 'success'})   
+    doc = {
+        'image': abs_path,
+        # 'user_id': user_id
+    }
+    db.image.insert_one(doc)
+    return jsonify({'result': 'success', 'abs_path': abs_path})
+# 'user_id': user_id
 
 # ㅡㅡㅡ 메인페이지 사진 보여주기 ㅡㅡㅡ
 
+    # ㅡㅡㅡ Diary 유저 정보 확인 ㅡㅡㅡ
+    # @app.route("/getuserinfo", methods=["GET"])
+    # # @authorize
+    # def get_user_info(user):
+    #     result = db.user.find_one({
+    #         "_id": ObjectId(user["id"])
+    #     })
+    #     print("110번재:", result)
 
-# ㅡㅡㅡ Diary 유저 정보 확인 ㅡㅡㅡ
-@app.route("/getuserinfo", methods=["GET"])
-@authorize
-def get_user_info(user):
-    result = db.user.find_one({
-        "_id": ObjectId(user["id"])
-    })
-    print("110번재:",result)
+    #     return jsonify({"message": "success", "id": result["id"]})
 
-    return jsonify({"message":"success", "id": result["id"]})
+    # ㅡㅡㅡ 게시판 api 시작 ㅡㅡㅡ
 
-# ㅡㅡㅡ 게시판 api 시작 ㅡㅡㅡ
-@app.route("/dairy", methods=["GET"])
-@authorize
-def get_article(user):
-    articles = list(db.article.find())
-    for article in articles:
-        article["_id"] = str(article["_id"])
+    # @app.route("/dairy", methods=["GET"])
+    # @authorize
+    # def get_article(user):
+    #     articles = list(db.article.find())
+    #     for article in articles:
+    #         article["_id"] = str(article["_id"])
 
-    return jsonify({"message":"success", "articles":articles})
+    #     return jsonify({"message": "success", "articles": articles})
 
-# ㅡㅡㅡ 게시판 삭제 ㅡㅡㅡ
+    # ㅡㅡㅡ 게시판 삭제 ㅡㅡㅡ
+
 
 if __name__ == '__main__':
     app.run('127.0.0.1', port=5000, debug=True)
