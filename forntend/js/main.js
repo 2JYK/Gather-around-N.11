@@ -14,6 +14,15 @@ function controlHidden() {
 }
 
 
+// function posting() {
+//     let image = $('#title').val()
+//     let file = $('#file')[0].files[0]
+//     let form_data = new FormData()
+
+//     form_data.append("title_give", title)
+//     form_data.append("file_give", file)
+
+
 function posting() {
     let image = $('#inputImage')[0].files[0]
     // let title = $('#upload-title').val()
@@ -41,17 +50,19 @@ function posting() {
             // // response_json = await response.json()
             // // console.log(response_json.abs_path)
 
-    //         "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
-    //         "outline": "none",
-    // "background-size": "100% 100%"
             image[0].style.backgroundImage = "url(/" + abs_path + ")"
-            // abs_path.setAttribute("src", "url(/" + abs_path + ")")
-
+        
         }
     });
 }
 
-// .css({
-//     "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
-//     "outline": "none",
-//     "background-size": "100% 100%"});
+async function show_image() {
+    const response = await fetch(`${backend_base_url}/upload`, {
+        method: "GET"
+    })
+
+    response_json = await response.json()
+    console.log(response_json)
+
+    return response_json.image
+}

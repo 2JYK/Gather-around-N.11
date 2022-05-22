@@ -17,7 +17,7 @@ cors = CORS(app, resources={r'*': {'origins': '*'}})
 client = MongoClient('localhost', 27017)
 db = client.gather
 
-    # ㅡㅡㅡ 전역함수 ㅡㅡㅡ
+# ㅡㅡㅡ 전역함수 ㅡㅡㅡ
 # 로컬 저장소에 토큰 값 저장하는 함수
 def authorize(f):
     @wraps(f)
@@ -39,6 +39,7 @@ def authorize(f):
             abort(401)
         return f(user, *args, **kwargs)
     return decorated_function
+
     # ㅡㅡㅡ 회원가입 ㅡㅡㅡ
 @app.route("/sub", methods=["POST"])
 def sign_up():
@@ -77,8 +78,9 @@ def sign_up():
     db.user.insert_one(doc)
     return jsonify({'message': '저장완료'}), 201
 
-
     # ㅡㅡㅡ 로그인 ㅡㅡㅡ
+
+
 @app.route("/login", methods=["POST"])
 def login():
     data = json.loads(request.data)
@@ -114,7 +116,6 @@ def login():
 # @authorize
 def upload_image():
     # data = request.form['image_give']
-
     image = request.files['image_give']
     # print(image)
     extension = image.filename.split('.')[-1]
@@ -125,6 +126,7 @@ def upload_image():
 
     save_to = f'/css/img/fish/{filename}.{extension}'
     test = os.path.abspath(__file__)
+
     # print(test)
     parent_path = Path(test).parent
     # print(f'parent_path는 {parent_path}')
@@ -135,6 +137,7 @@ def upload_image():
 
     # user = db.user.find_one({'_id': ObjectId(user['id'])})
 
+
     doc = {
         'image': abs_path,
         # 'user_id': user
@@ -143,17 +146,11 @@ def upload_image():
     return jsonify({'result': 'success', 'abs_path': abs_path})  
 
 
+
+
 # ㅡㅡㅡ 메인페이지 사진 보여주기 ㅡㅡㅡ
 # @app.route("/upload", methods=['GET'])
 # # @authorize
-# def show_image
-# @app.route('/fileshow/<title>')
-# def file_show(title):
-#     # title은 현재 이미지타이틀이므로, 그것을 이용해서 db에서 이미지 '파일'의 이름을 가지고 옴
-#     img_info = db.camp.find_one({'title': title})
-#     # 해당 이미지 정보를 jinja 형식으로 사용하기 위해 넘김
-#     return render_template('showimg.html', img_info=img_info)
-
 
 # ㅡㅡㅡ 물고기 정보 디비에서 빼오기 ㅡㅡㅡ 본인이 잡은 물고기가 무엇인지 알수 있음 !
 
@@ -168,19 +165,19 @@ def fish_detail(user, name_en):
     
     return jsonify({'message': '냠냠', 'user':user, "fishinfo": fishinfo})
 
-
-# ㅡㅡㅡ Diary 유저 정보 확인 ㅡㅡㅡ
+    #ㅡㅡㅡ Diary 유저 정보 확인 ㅡㅡㅡ
 @app.route("/getuserinfo", methods=["GET"])
-@authorize
+# @authorize
 def get_user_info(user):
     result = db.user.find_one({
         "_id": ObjectId(user["id"])
     })
-    print("110번재:",result)
+    print("110번재:", result)
 
-    return jsonify({"message":"success", "id": result["id"]})
+    return jsonify({"message": "success", "id": result["id"]})
 
-# ㅡㅡㅡ 게시판 api 시작 ㅡㅡㅡ
+    #ㅡㅡㅡ 게시판 api 시작 ㅡㅡㅡ
+
 @app.route("/dairy", methods=["GET"])
 @authorize
 def get_article(user):
@@ -188,9 +185,10 @@ def get_article(user):
     for article in articles:
         article["_id"] = str(article["_id"])
 
-    return jsonify({"message":"success", "articles":articles})
+    return jsonify({"message": "success", "articles": articles})
 
-# ㅡㅡㅡ 게시판 삭제 ㅡㅡㅡ
+    #ㅡㅡㅡ 게시판 삭제 ㅡㅡㅡ
+
 
 if __name__ == '__main__':
     app.run('127.0.0.1', port=5000, debug=True)
