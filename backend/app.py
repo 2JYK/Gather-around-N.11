@@ -144,8 +144,8 @@ def delete_article(user,article_id):
     # ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 # ㅡㅡㅡ 메인페이지 사진 업로드 ㅡㅡㅡ
 @app.route("/upload", methods=['POST'])
-@authorize
-def upload_image(user):
+# @authorize
+def upload_image():
 
     image = request.files['image_give']
     extension = image.filename.split('.')[-1]
@@ -153,16 +153,16 @@ def upload_image(user):
     mytime = today.strftime('%Y%m%d%H%M%S')
     filename = f'{mytime}'
 
-    save_to = f'/fish/{filename}.{extension}'
+    save_to = f'fish/{filename}.{extension}'
 
     image.save(save_to)
-     
+
     doc = {
         'image': save_to,
-        'user_id': user
+        # 'user_id': user
     }
     db.image.insert_one(doc)
-    return jsonify({'result': 'success', 'user':user, 'save_to': save_to})  
+    return jsonify({'result': 'success', 'save_to': save_to})  
 
 # 대근버전
 # @app.route("/upload", methods=['POST'])

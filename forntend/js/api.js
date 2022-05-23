@@ -185,12 +185,14 @@ $.ajax({
         console.log(save_to)
         const image = document.getElementById("img")
 
-        image.src = '../backend/' + save_to
+        image.src = '../backend/fish' + save_to
         console.log(image)
     }
     }
 );
 }
+
+
 // 경로 이동확인-대근버전
 //     $.ajax({
 //         type: "POST",
