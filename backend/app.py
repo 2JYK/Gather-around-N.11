@@ -144,61 +144,75 @@ def delete_article(user,article_id):
     # ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 # ㅡㅡㅡ 메인페이지 사진 업로드 ㅡㅡㅡ
 @app.route("/upload", methods=['POST'])
-# @authorize
-def upload_image():
-    # data = request.form['image_give']
+@authorize
+def upload_image(user):
+
     image = request.files['image_give']
-    # print(image)
     extension = image.filename.split('.')[-1]
     today = datetime.now()
     mytime = today.strftime('%Y%m%d%H%M%S')
-    # print(mytime)
     filename = f'{mytime}'
-    print("157번" , filename)
 
-    save_to = f'../../forntend/css/img/fish/{filename}.{extension}' # 이미지 경로 수정
+    save_to = f'/fish/{filename}.{extension}'
 
-    save_to_to = f'{filename}.{extension}'
-    
-    test = os.path.abspath(__file__)
-
-    # print(test)
-    parent_path = Path(test).parent
-    # print(f'parent_path는 {parent_path}')
-    abs_path = str(parent_path) + save_to
-    print(abs_path) # 애를 보내줘야함 url부분으로 !
-
-    image.save(abs_path)
-
-    # user = db.user.find_one({'_id': ObjectId(user['id'])})
-
-
+    image.save(save_to)
+     
     doc = {
-        'image': abs_path,
-        # 'user_id': user
+        'image': save_to,
+        'user_id': user
     }
     db.image.insert_one(doc)
-    return jsonify({'result': 'success', 'abs_path': abs_path, "save_to_to": save_to_to})  
+    return jsonify({'result': 'success', 'user':user, 'save_to': save_to})  
 
-
-
-
-# ㅡㅡㅡ 메인페이지 사진 보여주기 ㅡㅡㅡ
-# @app.route("/upload", methods=['GET'])
+# 대근버전
+# @app.route("/upload", methods=['POST'])
 # # @authorize
+# def upload_image():
+
+#     image = request.files['image_give']
+
+#     extension = image.filename.split('.')[-1]
+#     today = datetime.now()
+#     mytime = today.strftime('%Y%m%d%H%M%S')
+
+#     filename = f'{mytime}'
+
+#     save_to = f'backend/fish/{filename}.{extension}'
+
+#     image.save(save_to)
+#     save_to = "../" + save_to
+
+#     # user = user['id']
+
+#     doc = {
+#         'image': save_to,
+#         # 'user_id': user
+#     }
+#     db.image.insert_one(doc)
+#     return jsonify({'result': 'success', 'save_to': save_to})
+
 
 # ㅡㅡㅡ 물고기 정보 디비에서 빼오기 ㅡㅡㅡ 본인이 잡은 물고기가 무엇인지 알수 있음 !
 
-@app.route("/fish/<name_en>", methods=["GET"])
+@app.route("/fish/<string:name_en>", methods=["GET"])
 @authorize
 def fish_detail(user, name_en):
-    print(user, name_en)  
-    fishinfo = db.fish_info.find_one({"name_en": name_en})
-    print(fishinfo)
-    fishinfo["_id"] = str(fishinfo["_id"])
-    user = user["id"]
+    user_id = user["id"]
     
-    return jsonify({'message': 'success', 'user':user, "fishinfo": fishinfo})
+    userinfo = db.user.find_one({"_id":ObjectId(user_id)})
+    fishinfo = db.fish_info.find_one({"name_en":name_en})
+    fishinfo["_id"] = str(fishinfo["_id"])
+    
+    fishinfoes = userinfo['fishinfo']
+    
+    fishinfoes.append(str(fishinfo["_id"]))   
+    
+    db.user.update_one({'_id': ObjectId(user_id)}, {"$set":{'fishinfo': fishinfoes}})
+    
+
+    # db.user.insert_one({'_id': ObjectId(user), 'fishinfo': fishinfo})
+    #pymongo.errors.DuplicateKeyError: E11000 duplicate key error collection: gather.user index: _id_ dup key: { _id: ObjectId('628a531e6ff79d8e94abba87') }, full error: {'index': 0, 'code': 11000, 'keyPattern': {'_id': 1}, 'keyValue': {'_id': ObjectId('628a531e6ff79d8e94abba87')}, 'errmsg': "E11000 duplicate key error collection: gather.user index: _id_ dup key: { _id: ObjectId('628a531e6ff79d8e94abba87') }"}
+    return jsonify({'message': '냠냠', 'user':user, "fishinfo": fishinfo})
 
 
 
