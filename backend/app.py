@@ -109,7 +109,6 @@ def get_user_info(user):
     result = db.user.find_one({
         "_id": ObjectId(user["id"])
     })
-    print("110번재:",result)
 
     return jsonify({"message":"success", "id": result["id"]})
 
@@ -153,15 +152,25 @@ def upload_image():
     today = datetime.now()
     mytime = today.strftime('%Y%m%d%H%M%S')
     filename = f'{mytime}'
+    save_to = f'../forntend/css/img/fish/{filename}.{extension}'
 
-    save_to = f'fish/{filename}.{extension}'
+    image_to = request.files['image_give_to']
+    extension_to = image_to.filename.split('.')[-1]
+    today_to = datetime.now()
+    mytime_to = today_to.strftime('%Y%m%d%H%M%S')
+    filename_to = f'{mytime_to}'
+    save_to_to = f'fish/{filename_to}.{extension_to}'
 
     image.save(save_to)
+    image_to.save(save_to_to)
 
+    time = today.strftime('%Y-%m-%d')
     doc = {
         'image': save_to,
+        'time' : time
         # 'user_id': user
     }
+    
     db.image.insert_one(doc)
     return jsonify({'result': 'success', 'save_to': save_to})  
 
