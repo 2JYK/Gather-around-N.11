@@ -4,6 +4,7 @@ from bson import ObjectId
 from flask import Flask, request, jsonify, abort
 from flask_cors import CORS
 from pymongo import MongoClient
+from pathlib import Path
 import jwt
 import hashlib
 from datetime import datetime, timedelta
@@ -20,7 +21,7 @@ db = client.gather
 # 로컬 저장소에 토큰 값 저장하는 함수
 def authorize(f):
     @wraps(f)
-    def decorated_function():
+    def decorated_function(*args, **kwargs):
         if not 'Authorization' in request.headers:
             abort(401)
         token = request.headers['Authorization']
@@ -28,7 +29,7 @@ def authorize(f):
             user = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
         except:
             abort(401)
-        return f(user)
+        return f(user, *args, **kwargs)
     return decorated_function
 
 
@@ -133,6 +134,64 @@ def delete_article(user,article_id):
 
 
 
+
+
+
+
+    # ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+# ㅡㅡㅡ 메인페이지 사진 업로드 ㅡㅡㅡ
+@app.route("/upload", methods=['POST'])
+# @authorize
+def upload_image():
+    # data = request.form['image_give']
+    image = request.files['image_give']
+    # print(image)
+    extension = image.filename.split('.')[-1]
+    today = datetime.now()
+    mytime = today.strftime('%Y%m%d%H%M%S')
+    # print(mytime)
+    filename = f'{mytime}'
+
+    save_to = f'/css/img/fish/{filename}.{extension}'
+    test = os.path.abspath(__file__)
+
+    # print(test)
+    parent_path = Path(test).parent
+    # print(f'parent_path는 {parent_path}')
+    abs_path = str(parent_path) + save_to
+    print(abs_path) # 애를 보내줘야함 url부분으로 !
+
+    image.save(abs_path)
+
+    # user = db.user.find_one({'_id': ObjectId(user['id'])})
+
+
+    doc = {
+        'image': abs_path,
+        # 'user_id': user
+    }
+    db.image.insert_one(doc)
+    return jsonify({'result': 'success', 'abs_path': abs_path})  
+
+
+
+
+# ㅡㅡㅡ 메인페이지 사진 보여주기 ㅡㅡㅡ
+# @app.route("/upload", methods=['GET'])
+# # @authorize
+
+# ㅡㅡㅡ 물고기 정보 디비에서 빼오기 ㅡㅡㅡ 본인이 잡은 물고기가 무엇인지 알수 있음 !
+
+@app.route("/fish/<name_en>", methods=["GET"])
+@authorize
+def fish_detail(user, name_en):
+    print(user, name_en)  
+    fishinfo = db.fish_info.find_one({"name_en": name_en})
+    print(fishinfo)
+    fishinfo["_id"] = str(fishinfo["_id"])
+    user = user["id"]
+    
+    return jsonify({'message': 'success', 'user':user, "fishinfo": fishinfo})
 
 
 
