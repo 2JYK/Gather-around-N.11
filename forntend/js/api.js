@@ -82,20 +82,20 @@ async function getImg () {
 
 
     let response_json = await response.json()
-    console.log("85번", response_json["save_to_to"])
 
-    response_json_len = response_json['images'].length
-
-    response_json = response_json['images'][response_json_len-1]['image']
-    console.log('88번 줄',response_json.split("/")[2])
+    response_json = response_json['images']
     for (let i = 0; i < response_json.length; i++) {
-        console.log("리스트 나오면 성공 :", response_json[i]["image"])
-
-        append_temp_html(
-            response_json[i].image
+        for (let j = 0; j < response_json[i]["image"].split("/").length; j++) {
+            console.log("99번", response_json[i]["image"].split("/")[5])}
+        
+            append_temp_html(
+            response_json[i]["image"].split("/")[5],
+            response_json[i]["time"]
             )
-    }
-    function append_temp_html(img, name, info) {
+        }
+
+
+    function append_temp_html(img, time, info) {
     temp_html =  `
     <li>
     <div class="card" style="width: 18rem;">
@@ -106,12 +106,7 @@ async function getImg () {
       </div>
       </div>
       <div class="card-body">
-        <hr>
-        <h5 class="card-title">물고기 이름</h5>
-        <hr>
-        <p class="card-text">
-          물고기 설명
-        </p>
+        <h5 class="card-title">${time}</h5>
       </div>
     </div>
   </li>
@@ -171,7 +166,7 @@ function posting() {
     let form_data = new FormData()
 
     form_data.append("image_give", image)
-
+    form_data.append("image_give_to", image)
 // 경로 이동확인-슬기버전
 $.ajax({
     type: "POST",
