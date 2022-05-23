@@ -146,7 +146,7 @@ def delete_article(user,article_id):
 @app.route("/upload", methods=['POST'])
 # @authorize
 def upload_image():
-
+#
     image = request.files['image_give']
     extension = image.filename.split('.')[-1]
     today = datetime.now()
@@ -154,15 +154,15 @@ def upload_image():
     filename = f'{mytime}'
     save_to = f'../forntend/css/img/fish/{filename}.{extension}'
 
-    image_to = request.files['image_give_to']
-    extension_to = image_to.filename.split('.')[-1]
-    today_to = datetime.now()
-    mytime_to = today_to.strftime('%Y%m%d%H%M%S')
-    filename_to = f'{mytime_to}'
-    save_to_to = f'fish/{filename_to}.{extension_to}'
+    image_b = request.files['image_give_b']
+    extension_b = image_b.filename.split('.')[-1]
+    today_b = datetime.now()
+    mytime_b = today_b.strftime('%Y%m%d%H%M%S')
+    filename_b = f'{mytime_b}'
+    save_b = f'fish/{filename_b}.{extension_b}'
 
     image.save(save_to)
-    image_to.save(save_to_to)
+    image_b.save(save_b)
 
     time = today.strftime('%Y-%m-%d %H:%M')
     doc = {
