@@ -1,11 +1,14 @@
 * {
     font-family: 'Noto Sans KR', sans-serif;
-    list-style: none; /* 목록에 점 없애기 */
-    text-decoration: none; /* a태그에 색깔 밑줄 없애기 */
-    border-collapse: collapse; /* 테이블 태그 선 병합  */
+    list-style: none;
+    /* 목록에 점 없애기 */
+    text-decoration: none;
+    /* a태그에 색깔 밑줄 없애기 */
+    border-collapse: collapse;
+    /* 테이블 태그 선 병합  */
     margin: 0px;
     padding: 0px;
-    color: black; 
+    color: black;
 }
 
 
@@ -54,9 +57,22 @@
     padding: 10px;
 }
 
-.intro-img > h1{
+.intro-img>h1 {
     color: rgb(95, 46, 0);
     display: inline;
+}
+
+.goback {
+    float: right;
+    margin-right: 2%;
+    width: 100px;
+    height: 40px;
+    padding: 10 px;
+
+    background: transparent;
+    color: rgb(95, 46, 0);
+    border-radius: 50px;
+    border: 3px solid rgb(95, 46, 0);
 }
 
 .information {
@@ -66,19 +82,19 @@
     width: 80%;
     margin: auto;
     background: #fff;
-    box-shadow: 5px 0px 10px rgba(0,0,0,0.1);
+    box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-.information > li {
+.information>li {
     flex: 1;
     height: 132px;
 }
 
-.information > li:not(:last-child) > div{
+.information>li:not(:last-child)>div {
     border-right: 1px solid #E1E1E1;
 }
 
-.information > li > div {
+.information>li>div {
     text-align: center;
     height: 57px;
     margin-top: 37px;
@@ -90,14 +106,14 @@
     background: #F1F2F3;
 }
 
-.main-text0 > h1 {
+.main-text0>h1 {
     padding-top: 116px;
     font-size: 48px;
     text-align: center;
     font-weight: bold;
 }
 
-.main-text0 > .contents1 {
+.main-text0>.contents1 {
     text-align: center;
 }
 
@@ -113,16 +129,16 @@
     gap: 28px;
 
     @media screen and (max-width: 718px) {
-      gap: 3px;
+        gap: 3px;
     }
 }
 
-.post-card > li {
+.post-card>li {
     flex: 1;
     height: auto;
     margin: 20% auto auto 10%;
     text-align: center;
-} 
+}
 
 .card-img {
     /* width: 30.8vh; */
