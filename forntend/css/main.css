@@ -15,7 +15,6 @@ body {
     width : 940px;
     margin : 10px auto;
     padding : 20px;
-    border : 1px solid #bcbcbc;
     display : flex;
     flex-wrap : wrap;
 }
@@ -39,7 +38,6 @@ body {
     width: 400px;
     height: 400px;
     margin-bottom: 20px;
-    /* display : grid; */
 }
 .img {
     width: 100%;
@@ -79,7 +77,6 @@ body {
     font-size : 14px;
     align-items : center;
     padding : 20px;
-    /* border: 1px solid #bcbcbc; */
 }
 
 .icon {
@@ -92,7 +89,6 @@ body {
     width : 940px;
     margin : 10px auto;
     padding : 20px;
-    border : 1px solid #bcbcbc;
     display : flex;
     flex-wrap : wrap;
 }

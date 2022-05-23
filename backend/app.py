@@ -66,6 +66,7 @@ def sign_up():
     doc = {
         'id': id,
         'password': password_hash
+        # 'fishinfo':[]
     }
 
     db.user.insert_one(doc)
@@ -203,15 +204,10 @@ def fish_detail(user, name_en):
     fishinfo = db.fish_info.find_one({"name_en":name_en})
     fishinfo["_id"] = str(fishinfo["_id"])
     
-    fishinfoes = userinfo['fishinfo']
+    myfish = userinfo['fishinfo']
+    myfish.append(str(fishinfo["_id"]))   
     
-    fishinfoes.append(str(fishinfo["_id"]))   
-    
-    db.user.update_one({'_id': ObjectId(user_id)}, {"$set":{'fishinfo': fishinfoes}})
-    
-
-    # db.user.insert_one({'_id': ObjectId(user), 'fishinfo': fishinfo})
-    #pymongo.errors.DuplicateKeyError: E11000 duplicate key error collection: gather.user index: _id_ dup key: { _id: ObjectId('628a531e6ff79d8e94abba87') }, full error: {'index': 0, 'code': 11000, 'keyPattern': {'_id': 1}, 'keyValue': {'_id': ObjectId('628a531e6ff79d8e94abba87')}, 'errmsg': "E11000 duplicate key error collection: gather.user index: _id_ dup key: { _id: ObjectId('628a531e6ff79d8e94abba87') }"}
+    db.user.update_one({'_id': ObjectId(user_id)}, {"$set":{'fishinfo': myfish}})
     return jsonify({'message': '냠냠', 'user':user, "fishinfo": fishinfo})
 
 
