@@ -5,8 +5,6 @@ from flask_cors import CORS
 from pymongo import MongoClient
 import jwt
 from bson import ObjectId
-import os
-from pathlib import Path
 import hashlib
 from datetime import datetime, timedelta
 
@@ -73,7 +71,7 @@ def sign_up():
     doc = {
         'id': id,
         'password': password_hash,
-        'fishinfo': ''
+        'fishinfo': []
     }
 
     db.user.insert_one(doc)
@@ -114,52 +112,70 @@ def login():
 
 
 @app.route("/upload", methods=['POST'])
-# @authorize
-def upload_image():
-    # data = request.form['image_give']
+@authorize
+def upload_image(user):
+
     image = request.files['image_give']
-    # print(image)
     extension = image.filename.split('.')[-1]
     today = datetime.now()
     mytime = today.strftime('%Y%m%d%H%M%S')
-    # print(mytime)
     filename = f'{mytime}'
 
-    save_to = f'/css/img/fish/{filename}.{extension}'
-    test = os.path.abspath(__file__)
+    save_to = f'/fish/{filename}.{extension}'
 
-    # print(test)
-    parent_path = Path(test).parent
-    # print(f'parent_path는 {parent_path}')
-    abs_path = str(parent_path) + save_to
-    print(abs_path) # 애를 보내줘야함 url부분으로 !
-
-    image.save(abs_path)
-
-    # user = db.user.find_one({'_id': ObjectId(user['id'])})
-
-
+    image.save(save_to)
+     
     doc = {
-        'image': abs_path,
-        # 'user_id': user
+        'image': save_to,
+        'user_id': user
     }
     db.image.insert_one(doc)
-    return jsonify({'result': 'success', 'abs_path': abs_path})  
+    return jsonify({'result': 'success', 'user':user, 'save_to': save_to})  
+
+# 대근버전
+# @app.route("/upload", methods=['POST'])
+# # @authorize
+# def upload_image():
+
+#     image = request.files['image_give']
+
+#     extension = image.filename.split('.')[-1]
+#     today = datetime.now()
+#     mytime = today.strftime('%Y%m%d%H%M%S')
+
+#     filename = f'{mytime}'
+
+#     save_to = f'backend/fish/{filename}.{extension}'
+
+#     image.save(save_to)
+#     save_to = "../" + save_to
+
+#     # user = user['id']
+
+#     doc = {
+#         'image': save_to,
+#         # 'user_id': user
+#     }
+#     db.image.insert_one(doc)
+#     return jsonify({'result': 'success', 'save_to': save_to})
+
 
 # ㅡㅡㅡ 물고기 정보 디비에서 빼오기 ㅡㅡㅡ 본인이 잡은 물고기가 무엇인지 알수 있음 !
 
-@app.route("/fish/<name_en>", methods=["GET"])
+@app.route("/fish/<string:name_en>", methods=["GET"])
 @authorize
 def fish_detail(user, name_en):
- 
-    user = user["id"]
-    fishinfo = db.fish_info.find_one({"name_en": name_en})
-    print(fishinfo)
+    user_id = user["id"]
+    
+    userinfo = db.user.find_one({"_id":ObjectId(user_id)})
+    fishinfo = db.fish_info.find_one({"name_en":name_en})
     fishinfo["_id"] = str(fishinfo["_id"])
     
+    fishinfoes = userinfo['fishinfo']
     
+    fishinfoes.append(str(fishinfo["_id"]))   
     
-    db.user.update_one({'_id': ObjectId(user)}, {'$set': {'fishinfo': fishinfo}})
+    db.user.update_one({'_id': ObjectId(user_id)}, {"$set":{'fishinfo': fishinfoes}})
     
 
     # db.user.insert_one({'_id': ObjectId(user), 'fishinfo': fishinfo})
