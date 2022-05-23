@@ -104,7 +104,6 @@
 
 /* 포스트 카드 */
 .post-card {
-    display: flex;
     width: 80%;
     margin: auto;
     display: grid;
@@ -131,6 +130,7 @@
     background-size: cover;
     background-position: center;
 }
+
 
 /* 글자수 제한 */
 .card-text {
