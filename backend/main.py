@@ -165,29 +165,7 @@ def fish_detail(user, name_en):
     
     return jsonify({'message': '냠냠', 'user':user, "fishinfo": fishinfo})
 
-    #ㅡㅡㅡ Diary 유저 정보 확인 ㅡㅡㅡ
-@app.route("/getuserinfo", methods=["GET"])
-# @authorize
-def get_user_info(user):
-    result = db.user.find_one({
-        "_id": ObjectId(user["id"])
-    })
-    print("110번재:", result)
 
-    return jsonify({"message": "success", "id": result["id"]})
-
-    #ㅡㅡㅡ 게시판 api 시작 ㅡㅡㅡ
-
-@app.route("/dairy", methods=["GET"])
-@authorize
-def get_article(user):
-    articles = list(db.article.find())
-    for article in articles:
-        article["_id"] = str(article["_id"])
-
-    return jsonify({"message": "success", "articles": articles})
-
-    #ㅡㅡㅡ 게시판 삭제 ㅡㅡㅡ
 
 
 if __name__ == '__main__':
