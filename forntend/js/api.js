@@ -158,13 +158,12 @@ getImg()
 
 
 
-// console.log('메인페이지') //연결 확인
-console.log(localStorage.getItem("token"))  // 토큰값 확인
-function myFish() {
-    window.location.replace(`${frontend_base_url}/diary.html`);
-}
-// 경로 이동확인
 
+// console.log('메인페이지') //연결 확인
+// console.log(localStorage.getItem("token"))  // 토큰값 확인
+function myFish() {
+    window.location.replace(`http://127.0.0.1:5500/diary.html`);
+}
 
 
 function posting() {
@@ -173,32 +172,42 @@ function posting() {
 
     form_data.append("image_give", image)
 
-    $.ajax({
-        type: "POST",
-        url: "http://127.0.0.1:5000/upload",
-        data: form_data,
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            alert(response["abs_path"])
+// 경로 이동확인-슬기버전
+$.ajax({
+    type: "POST",
+    url: "http://127.0.0.1:5000/upload",
+    data: form_data,
+    cache: false,
+    contentType: false,
+    processData: false,
+    success: function (response) {
+        const save_to = response["save_to"]
+        console.log(save_to)
+        const image = document.getElementById("img")
 
-            const abs_path = response["abs_path"]
-            const image = document.getElementById("image")
-
-            image[0].style.backgroundImage = "url(/" + abs_path + ")"
-        
-        }
-    });
+        image.src = '../backend/' + save_to
+        console.log(image)
+    }
+    }
+);
 }
+// 경로 이동확인-대근버전
+//     $.ajax({
+//         type: "POST",
+//         url: "http://127.0.0.1:5000/upload",
+//         data: form_data,
+//         cache: false,
+//         contentType: false,
+//         processData: false,
+//         success: function (response) {
+//             const save_to = response["save_to"]
+//             console.log(save_to)
+//             const image = document.getElementById("img")
 
-async function show_image() {
-    const response = await fetch(`${backend_base_url}/upload`, {
-        method: "GET"
-    })
-
-    response_json = await response.json()
-    console.log(response_json)
-
-    return response_json.image
-}
+//             console.log(save_to)
+//             image.src = save_to
+//             console.log(image)
+//         }
+//     }
+// );
+// }
