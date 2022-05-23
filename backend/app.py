@@ -164,7 +164,7 @@ def upload_image():
     image.save(save_to)
     image_to.save(save_to_to)
 
-    time = today.strftime('%Y-%m-%d')
+    time = today.strftime('%Y-%m-%d %H:%M')
     doc = {
         'image': save_to,
         'time' : time

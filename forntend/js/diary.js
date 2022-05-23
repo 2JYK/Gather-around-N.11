@@ -24,7 +24,7 @@ async function checkLogin() {
     const name = await getName();
     
     const username = document.getElementById("user_name")
-    username.innerText = name + " 님의 게시판 "
+    username.innerText = name + " 님의 사진첩 "
 };
 
 checkLogin()
