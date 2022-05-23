@@ -53,8 +53,7 @@ async function getName() {
         headers: {
             'Authorization': localStorage.getItem("token")
         }
-    }
-    )
+    })
 
     if (response.status == 200) {
         response_json = await response.json()
@@ -67,6 +66,63 @@ async function getName() {
         return null
     }
 }
+
+
+// 게시글 GET 함수
+async function getImg () {
+    const response = await fetch(`${backend_base_url}/diary`, {
+        method : "GET",
+        headers: {
+            'Authorization': localStorage.getItem("token")
+        }
+    })
+
+    // img = response_json["images"][0]["image"].split("/")[2]
+    // console.log(img)
+
+
+    let response_json = await response.json()
+    console.log("85번", response_json["save_to_to"])
+
+    response_json_len = response_json['images'].length
+
+    response_json = response_json['images'][response_json_len-1]['image']
+    console.log('88번 줄',response_json.split("/")[2])
+    for (let i = 0; i < response_json.length; i++) {
+        console.log("리스트 나오면 성공 :", response_json[i]["image"])
+
+        append_temp_html(
+            response_json[i].image
+            )
+    }
+    function append_temp_html(img, name, info) {
+    temp_html =  `
+    <li>
+    <div class="card" style="width: 18rem;">
+      <div class="card-img" style="background-image:
+      url(../css/img/fish/${img});">
+      <div class="card-delete" onclick="removeArticle()">
+        X
+      </div>
+      </div>
+      <div class="card-body">
+        <hr>
+        <h5 class="card-title">물고기 이름</h5>
+        <hr>
+        <p class="card-text">
+          물고기 설명
+        </p>
+      </div>
+    </div>
+  </li>
+    `
+
+    $("#card").append(temp_html)
+    }
+}
+getImg()
+// DB : image 를 불러와서 이미지 를 불러오려 했으나 언디파인드 or 오브젝트 값으로 뜸
+
 
 
 // // diary 불러오기
@@ -110,31 +166,12 @@ function myFish() {
 // 경로 이동확인
 
 
-function controlHidden() {
-    const show = document.getElementById("uploadPhoto");
-    const upload = document.getElementById("showPhoto");
-    show.classList.remove("hidden");
-    upload.classList.add("hidden");
-}
-
-
-// function posting() {
-//     let image = $('#title').val()
-//     let file = $('#file')[0].files[0]
-//     let form_data = new FormData()
-
-//     form_data.append("title_give", title)
-//     form_data.append("file_give", file)
-
 
 function posting() {
     let image = $('#inputImage')[0].files[0]
-    // let title = $('#upload-title').val()
     let form_data = new FormData()
 
     form_data.append("image_give", image)
-    // console.log(form_data);
-    // form_data.append("title_give", title)
 
     $.ajax({
         type: "POST",
@@ -144,15 +181,10 @@ function posting() {
         contentType: false,
         processData: false,
         success: function (response) {
-            // console.log(response)
             alert(response["abs_path"])
 
             const abs_path = response["abs_path"]
-            // console.log(abs_path)
             const image = document.getElementById("image")
-            // console.log(image)
-            // // response_json = await response.json()
-            // // console.log(response_json.abs_path)
 
             image[0].style.backgroundImage = "url(/" + abs_path + ")"
         

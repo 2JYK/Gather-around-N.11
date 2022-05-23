@@ -8,7 +8,7 @@ from pathlib import Path
 import jwt
 import hashlib
 from datetime import datetime, timedelta
-
+import os
 
 SECRET_KEY = "abcd"
 
@@ -112,15 +112,18 @@ def get_user_info(user):
 
     return jsonify({"message":"success", "id": result["id"]})
 
+
 # ㅡㅡㅡ 게시판 api 시작 ㅡㅡㅡ
-@app.route("/dairy", methods=["GET"])
+@app.route("/diary", methods=["GET"])
 @authorize
 def get_article(user):
-    articles = list(db.article.find())
-    for article in articles:
-        article["_id"] = str(article["_id"])
+    images = list(db.image.find())
+    for image in images:
+        image["_id"] = str(image["_id"])
 
-    return jsonify({"message":"success", "articles":articles})
+    return jsonify({"message":"success", "images":images})
+# DB에서 이미지값을 클라에게 보내줌.
+
 
 # ㅡㅡㅡ 게시판 삭제 ㅡㅡㅡ
 @app.route("/dairy", methods=['DELETE'])
@@ -151,8 +154,12 @@ def upload_image():
     mytime = today.strftime('%Y%m%d%H%M%S')
     # print(mytime)
     filename = f'{mytime}'
+    print("157번" , filename)
 
-    save_to = f'/css/img/fish/{filename}.{extension}'
+    save_to = f'../../forntend/css/img/fish/{filename}.{extension}' # 이미지 경로 수정
+
+    save_to_to = f'{filename}.{extension}'
+    
     test = os.path.abspath(__file__)
 
     # print(test)
@@ -171,7 +178,7 @@ def upload_image():
         # 'user_id': user
     }
     db.image.insert_one(doc)
-    return jsonify({'result': 'success', 'abs_path': abs_path})  
+    return jsonify({'result': 'success', 'abs_path': abs_path, "save_to_to": save_to_to})  
 
 
 
