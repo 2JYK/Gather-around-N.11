@@ -72,7 +72,8 @@ def sign_up():
 # ㅡㅡㅡ db에 저장 ㅡㅡㅡ
     doc = {
         'id': id,
-        'password': password_hash
+        'password': password_hash,
+        'fishinfo': ''
     }
 
     db.user.insert_one(doc)
@@ -145,25 +146,26 @@ def upload_image():
     db.image.insert_one(doc)
     return jsonify({'result': 'success', 'abs_path': abs_path})  
 
-
-
-
-# ㅡㅡㅡ 메인페이지 사진 보여주기 ㅡㅡㅡ
-# @app.route("/upload", methods=['GET'])
-# # @authorize
-
 # ㅡㅡㅡ 물고기 정보 디비에서 빼오기 ㅡㅡㅡ 본인이 잡은 물고기가 무엇인지 알수 있음 !
 
 @app.route("/fish/<name_en>", methods=["GET"])
 @authorize
 def fish_detail(user, name_en):
-    print(user, name_en)  
+ 
+    user = user["id"]
     fishinfo = db.fish_info.find_one({"name_en": name_en})
     print(fishinfo)
     fishinfo["_id"] = str(fishinfo["_id"])
-    user = user["id"]
     
+    
+    
+    db.user.update_one({'_id': ObjectId(user)}, {'$set': {'fishinfo': fishinfo}})
+    
+
+    # db.user.insert_one({'_id': ObjectId(user), 'fishinfo': fishinfo})
+    #pymongo.errors.DuplicateKeyError: E11000 duplicate key error collection: gather.user index: _id_ dup key: { _id: ObjectId('628a531e6ff79d8e94abba87') }, full error: {'index': 0, 'code': 11000, 'keyPattern': {'_id': 1}, 'keyValue': {'_id': ObjectId('628a531e6ff79d8e94abba87')}, 'errmsg': "E11000 duplicate key error collection: gather.user index: _id_ dup key: { _id: ObjectId('628a531e6ff79d8e94abba87') }"}
     return jsonify({'message': '냠냠', 'user':user, "fishinfo": fishinfo})
+
 
 
 
