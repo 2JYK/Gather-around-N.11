@@ -45,6 +45,8 @@ async function login() {
     response_json = await response.json()
     localStorage.setItem("token", response_json.token)
 }
+
+
 // 유저 아이디 받아오기
 async function getName() {
     const response = await fetch(`${backend_base_url}/getuserinfo`, {
@@ -60,6 +62,8 @@ async function getName() {
         return response_json.id
     }
     else {
+        alert("로그인이 필요한 페이지 입니다.")
+        window.location.replace(`${frontend_base_url}/sub.html`)
         return null
     }
 }
