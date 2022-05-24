@@ -10,6 +10,7 @@ import hashlib
 from datetime import datetime, timedelta
 import os
 
+
 SECRET_KEY = "abcd"
 
 app = Flask(__name__)
@@ -218,10 +219,6 @@ def fish_detail(user, name_en):
     
     db.user.update_one({'_id': ObjectId(user_id)}, {"$set":{'fishinfo': myfish}})
     return jsonify({'message': '냠냠', 'user':user, "fishinfo": fishinfo})
-
-
-
-
 
 
 
