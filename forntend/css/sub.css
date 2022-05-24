@@ -1,0 +1,101 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    height: 100%;
+    list-style: none;
+    text-decoration: none;
+}
+
+body {
+    width: 100%;
+    height: auto;
+    /* 배경 이미지 */
+    background-image: url(./img/gather.jpg);
+    min-height: 100%;
+    background-size: cover;
+}
+
+/* 로고 */
+.logo {
+    position: absolute;
+    top: 160px;
+    left: 430px;
+}
+
+@media screen and (max-width:1000px) { 
+    .logo { 
+        display: none; 
+    } 
+}
+
+/* 날씨 아이콘 */
+.weather {
+    display: flex;
+    float: right;
+
+    /* background-color: wheat; */
+    /* width: 80px;
+    height: 80px; */
+    margin: 30px 30px 0px 0px;
+
+    font-size: 14px;
+    align-items: center;
+    transition: all 1s linear;
+}
+
+.icon {
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+}
+
+/* 로그인,회원가입 창 */
+.loginbox {
+    display: flex;
+    float: right;
+    flex-direction: column;
+
+    width: 500px;
+    height: 500px;
+    margin: 150px 0px 0px 0px;
+    border-radius: 10px;
+
+    font-size: 14px;
+    align-items: center;
+    justify-content: center;
+}
+
+.innerbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.form-control {
+    width: 450px;
+    /* margin: 10px; */
+
+}
+
+.btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-right: 100px;
+}
+
+.btns>div {
+    margin: 5px;
+    width: 200px;
+
+}
+
+.btn {
+    margin: 10px;
+}
