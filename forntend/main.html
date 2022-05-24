@@ -11,7 +11,8 @@
         crossorigin="anonymous"></script>
 
     <link rel="stylesheet" type="text/css" href="./css/main.css">
-    <script src="js/main.js"></script>
+    <script src="./js/api.js"></script>
+    <!-- <script src="./js/main.js"></script> -->
 
 </head>
 
@@ -19,21 +20,21 @@
     <div class="header">
         <div class="weather">
             <img class="icon" src="./css/img/sun4.png"
-                onclick="window.open('https:/www.weather.go.kr/w/ocean/forecast/daily-forecast.do','top=5','left=5', 'window_name','width=500,height=500,location=no,status=no,scrollbars=yes');">
+              onclick="window.open('https:/www.weather.go.kr/w/ocean/forecast/daily-forecast.do','top=5','left=5', 'window_name','width=500,height=500,location=no,status=no,scrollbars=yes');">
         </div>
     </div>
     <div class="container" id="container">
         <div class="content" id="content">
             <div class="upload" id="upload">
                 <div class="image">
-                    <img class="img" id="img">
+                    <img id="img" class="img">
                 </div>
                 <div class="uploadBox">
                     <input type="file" id="inputImage" accept=".jpg, .png, .jpeg" required>
+                    <label for="file"></label>
                     <button type="button" onclick="posting()">업로드</button>
                 </div>
             </div>
-            <!-- <img class="hidden" src="/css/img/{{ img_info.img }}"> -->
         </div>
 
         <div class="sidebar" id="sidebar">
@@ -48,10 +49,10 @@
         <button class="myFish" onclick="myFish()">내가 잡은 물고기</button>
     </div>
     <!-- controls 오디오 조정 하는 창 나중에 뺄 것  -->
-    <!-- <audio autoplay loop controls id="audio">
-        오디오를 지원하지 않는 브라우저
+    <audio autoplay loop controls id="audio">
+        <!-- 오디오를 지원하지 않는 브라우저 -->
         <source src="/forntend/css/img/gather.mp3" type="audio/mp3">
-    </audio> -->
+    </audio>
 </body>
 
 </html>

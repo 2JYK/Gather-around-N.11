@@ -10,26 +10,28 @@ function posting() {
     let form_data = new FormData()
 
     form_data.append("image_give", image)
-
+    form_data.append("image_give_b", image)
 // 경로 이동확인-슬기버전
-$.ajax({
-    type: "POST",
-    url: "http://127.0.0.1:5000/upload",
-    data: form_data,
-    cache: false,
-    contentType: false,
-    processData: false,
-    success: function (response) {
-        const save_to = response["save_to"]
-        console.log(save_to)
-        const image = document.getElementById("img")
+    $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:5000/upload",
+        data: form_data,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            const save_to = response["save_to"]
+            console.log(save_to)
+            const image = document.getElementById("img")
 
-        image.src = '../backend/' + save_to
-        console.log(image)
+            image.src = save_to
+            console.log(image)
+        }
+        }
+    );
     }
-    }
-);
-}
+
+
 // 경로 이동확인-대근버전
 //     $.ajax({
 //         type: "POST",
@@ -50,5 +52,3 @@ $.ajax({
 //     }
 // );
 // }
-
-
