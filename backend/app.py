@@ -1,11 +1,15 @@
 from functools import wraps
 import json
+from bson import ObjectId
 from flask import Flask, request, jsonify, abort
 from flask_cors import CORS
 from pymongo import MongoClient
+from pathlib import Path
 import jwt
 import hashlib
 from datetime import datetime, timedelta
+import os
+
 
 SECRET_KEY = "abcd"
 
@@ -18,7 +22,7 @@ db = client.gather
 # 로컬 저장소에 토큰 값 저장하는 함수
 def authorize(f):
     @wraps(f)
-    def decorated_function():
+    def decorated_function(*args, **kwargs):
         if not 'Authorization' in request.headers:
             abort(401)
         token = request.headers['Authorization']
@@ -26,7 +30,7 @@ def authorize(f):
             user = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
         except:
             abort(401)
-        return f(user)
+        return f(user, *args, **kwargs)
     return decorated_function
 
 
@@ -63,6 +67,7 @@ def sign_up():
     doc = {
         'id': id,
         'password': password_hash
+        # 'fishinfo':[]
     }
 
     db.user.insert_one(doc)
@@ -97,6 +102,124 @@ def login():
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
     return jsonify({'message': '로그인 성공!', 'token': token})
+
+# ㅡㅡㅡ Diary 유저 정보 확인 ㅡㅡㅡ
+@app.route("/getuserinfo", methods=["GET"])
+@authorize
+def get_user_info(user):
+    result = db.user.find_one({
+        "_id": ObjectId(user["id"])
+    })
+
+    return jsonify({"message":"success", "id": result["id"]})
+
+
+# ㅡㅡㅡ 게시판 api 시작 ㅡㅡㅡ
+@app.route("/diary", methods=["GET"])
+@authorize
+def get_article(user):
+    images = list(db.image.find())
+    for image in images:
+        image["_id"] = str(image["_id"])
+
+    return jsonify({"message":"success", "images":images})
+# DB에서 이미지값을 클라에게 보내줌.
+
+
+# ㅡㅡㅡ 게시판 삭제 ㅡㅡㅡ
+@app.route("/dairy", methods=['DELETE'])
+@authorize
+def delete_article(user,article_id):
+    article = db.article.delete_one(
+        {"_id":ObjectId(article_id), "user":user["id"]}
+    )
+    if article.deleted_count:
+        return jsonify({"mesage":"success"})
+
+
+
+
+
+
+
+    # ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+# ㅡㅡㅡ 메인페이지 사진 업로드 ㅡㅡㅡ
+@app.route("/upload", methods=['POST'])
+# @authorize
+def upload_image():
+#
+    image = request.files['image_give']
+    extension = image.filename.split('.')[-1]
+    today = datetime.now()
+    mytime = today.strftime('%Y%m%d%H%M%S')
+    filename = f'{mytime}'
+    save_to = f'../forntend/css/img/fish/{filename}.{extension}'
+
+    image_b = request.files['image_give_b']
+    extension_b = image_b.filename.split('.')[-1]
+    today_b = datetime.now()
+    mytime_b = today_b.strftime('%Y%m%d%H%M%S')
+    filename_b = f'{mytime_b}'
+    save_b = f'fish/{filename_b}.{extension_b}'
+
+    image.save(save_to)
+    image_b.save(save_b)
+
+    time = today.strftime('%Y-%m-%d %H:%M')
+    doc = {
+        'image': save_to,
+        'time' : time
+        # 'user_id': user
+    }
+    
+    db.image.insert_one(doc)
+    return jsonify({'result': 'success', 'save_to': save_to})  
+
+# 대근버전
+# @app.route("/upload", methods=['POST'])
+# # @authorize
+# def upload_image():
+
+#     image = request.files['image_give']
+
+#     extension = image.filename.split('.')[-1]
+#     today = datetime.now()
+#     mytime = today.strftime('%Y%m%d%H%M%S')
+
+#     filename = f'{mytime}'
+
+#     save_to = f'backend/fish/{filename}.{extension}'
+
+#     image.save(save_to)
+#     save_to = "../" + save_to
+
+#     # user = user['id']
+
+#     doc = {
+#         'image': save_to,
+#         # 'user_id': user
+#     }
+#     db.image.insert_one(doc)
+#     return jsonify({'result': 'success', 'save_to': save_to})
+
+
+# ㅡㅡㅡ 물고기 정보 디비에서 빼오기 ㅡㅡㅡ 본인이 잡은 물고기가 무엇인지 알수 있음 !
+
+@app.route("/fish/<string:name_en>", methods=["GET"])
+@authorize
+def fish_detail(user, name_en):
+    user_id = user["id"]
+    
+    userinfo = db.user.find_one({"_id":ObjectId(user_id)})
+    fishinfo = db.fish_info.find_one({"name_en":name_en})
+    fishinfo["_id"] = str(fishinfo["_id"])
+    
+    myfish = userinfo['fishinfo']
+    myfish.append(str(fishinfo["_id"]))   
+    
+    db.user.update_one({'_id': ObjectId(user_id)}, {"$set":{'fishinfo': myfish}})
+    return jsonify({'message': '냠냠', 'user':user, "fishinfo": fishinfo})
+
 
 
 
