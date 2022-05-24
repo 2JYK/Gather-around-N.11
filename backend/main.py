@@ -1,14 +1,14 @@
 # from functools import wraps
 # import json
+# from bson import ObjectId
 # from flask import Flask, request, jsonify, abort
 # from flask_cors import CORS
 # from pymongo import MongoClient
-# import jwt
-# from bson import ObjectId
-# import os
 # from pathlib import Path
+# import jwt
 # import hashlib
 # from datetime import datetime, timedelta
+# import os
 
 # SECRET_KEY = "abcd"
 
@@ -17,28 +17,21 @@
 # client = MongoClient('localhost', 27017)
 # db = client.gather
 
-# # ㅡㅡㅡ 전역함수 ㅡㅡㅡ
+#     # ㅡㅡㅡ 전역함수 ㅡㅡㅡ
 # # 로컬 저장소에 토큰 값 저장하는 함수
 # def authorize(f):
 #     @wraps(f)
-#     # argument와 key-word argument가 같이 들어가는 경우를 위해 작성
-#     # *과 ** 만 있다면 이름은 뒤에 아무거나 붙어도 무방은 함
-#     # *args: list 형태로 아무거나 다 들어와 된다.
-#     # **kwargs : a = b의 형태로 즉, 키워드의 형태로 몇개씩 들어와도 인식을 하겠다.
 #     def decorated_function(*args, **kwargs):
-#         # 만약 Authorization이 헤더 안에 없다면
 #         if not 'Authorization' in request.headers:
-#             abort(401)  # 401 에러를 반환
-#         # Authorization이 헤더 안에 있다면 'token' 변수에 저장
+#             abort(401)
 #         token = request.headers['Authorization']
 #         try:
-#             # 토큰을 디코드한 값을 user에 저장
-#             # _id, email, exp가 들어있음
 #             user = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
 #         except:
 #             abort(401)
 #         return f(user, *args, **kwargs)
 #     return decorated_function
+
 
 #     # ㅡㅡㅡ 회원가입 ㅡㅡㅡ
 # @app.route("/sub", methods=["POST"])
@@ -73,14 +66,14 @@
 #     doc = {
 #         'id': id,
 #         'password': password_hash
+#         # 'fishinfo':[]
 #     }
 
 #     db.user.insert_one(doc)
 #     return jsonify({'message': '저장완료'}), 201
 
+
 #     # ㅡㅡㅡ 로그인 ㅡㅡㅡ
-
-
 # @app.route("/login", methods=["POST"])
 # def login():
 #     data = json.loads(request.data)
@@ -109,63 +102,119 @@
 
 #     return jsonify({'message': '로그인 성공!', 'token': token})
 
+# # ㅡㅡㅡ Diary 유저 정보 확인 ㅡㅡㅡ
+# @app.route("/getuserinfo", methods=["GET"])
+# @authorize
+# def get_user_info(user):
+#     result = db.user.find_one({
+#         "_id": ObjectId(user["id"])
+#     })
 
+#     return jsonify({"message":"success", "id": result["id"]})
+
+
+# # ㅡㅡㅡ 게시판 api 시작 ㅡㅡㅡ
+# @app.route("/diary", methods=["GET"])
+# @authorize
+# def get_article(user):
+#     images = list(db.image.find())
+#     for image in images:
+#         image["_id"] = str(image["_id"])
+
+#     return jsonify({"message":"success", "images":images})
+# # DB에서 이미지값을 클라에게 보내줌.
+
+
+# # ㅡㅡㅡ 게시판 삭제 ㅡㅡㅡ
+# @app.route("/dairy", methods=['DELETE'])
+# @authorize
+# def delete_article(user,article_id):
+#     article = db.article.delete_one(
+#         {"_id":ObjectId(article_id), "user":user["id"]}
+#     )
+#     if article.deleted_count:
+#         return jsonify({"mesage":"success"})
+
+# # ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 # # ㅡㅡㅡ 메인페이지 사진 업로드 ㅡㅡㅡ
 # @app.route("/upload", methods=['POST'])
 # # @authorize
 # def upload_image():
-#     # data = request.form['image_give']
+# #_b 는 백엔드 저장 / 없는건 프론트엔드 저장
 #     image = request.files['image_give']
-#     # print(image)
 #     extension = image.filename.split('.')[-1]
 #     today = datetime.now()
 #     mytime = today.strftime('%Y%m%d%H%M%S')
-#     # print(mytime)
 #     filename = f'{mytime}'
+#     save_to = f'../forntend/css/img/fish/{filename}.{extension}'
 
-#     save_to = f'/css/img/fish/{filename}.{extension}'
-#     test = os.path.abspath(__file__)
+#     image_b = request.files['image_give_b']
+#     extension_b = image_b.filename.split('.')[-1]
+#     today_b = datetime.now()
+#     mytime_b = today_b.strftime('%Y%m%d%H%M%S')
+#     filename_b = f'{mytime_b}'
+#     save_b = f'fish/{filename_b}.{extension_b}'
 
-#     # print(test)
-#     parent_path = Path(test).parent
-#     # print(f'parent_path는 {parent_path}')
-#     abs_path = str(parent_path) + save_to
-#     print(abs_path) # 애를 보내줘야함 url부분으로 !
+#     image.save(save_to)
+#     image_b.save(save_b)
 
-#     image.save(abs_path)
-
-#     # user = db.user.find_one({'_id': ObjectId(user['id'])})
-
-
+#     time = today.strftime('%Y-%m-%d %H:%M')
 #     doc = {
-#         'image': abs_path,
+#         'image': save_to,
+#         'time' : time
 #         # 'user_id': user
 #     }
+    
 #     db.image.insert_one(doc)
-#     return jsonify({'result': 'success', 'abs_path': abs_path})  
+#     return jsonify({'result': 'success', 'save_to': save_to})  
 
-
-
-
-# # ㅡㅡㅡ 메인페이지 사진 보여주기 ㅡㅡㅡ
-# # @app.route("/upload", methods=['GET'])
+# # 대근버전
+# # @app.route("/upload", methods=['POST'])
 # # # @authorize
+# # def upload_image():
+
+# #     image = request.files['image_give']
+
+# #     extension = image.filename.split('.')[-1]
+# #     today = datetime.now()
+# #     mytime = today.strftime('%Y%m%d%H%M%S')
+
+# #     filename = f'{mytime}'
+
+# #     save_to = f'backend/fish/{filename}.{extension}'
+
+# #     image.save(save_to)
+# #     save_to = "../" + save_to
+
+# #     # user = user['id']
+
+# #     doc = {
+# #         'image': save_to,
+# #         # 'user_id': user
+# #     }
+# #     db.image.insert_one(doc)
+# #     return jsonify({'result': 'success', 'save_to': save_to})
+
 
 # # ㅡㅡㅡ 물고기 정보 디비에서 빼오기 ㅡㅡㅡ 본인이 잡은 물고기가 무엇인지 알수 있음 !
 
-# @app.route("/fish/<name_en>", methods=["GET"])
+# @app.route("/fish/<string:name_en>", methods=["GET"])
 # @authorize
 # def fish_detail(user, name_en):
-#     print(user, name_en)  
-#     fishinfo = db.fish_info.find_one({"name_en": name_en})
-#     print(fishinfo)
-#     fishinfo["_id"] = str(fishinfo["_id"])
-#     user = user["id"]
+#     user_id = user["id"]
     
-#     return jsonify({'message': 'success', 'user':user, "fishinfo": fishinfo})
-
+#     userinfo = db.user.find_one({"_id":ObjectId(user_id)})
+#     fishinfo = db.fish_info.find_one({"name_en":name_en})
+#     fishinfo["_id"] = str(fishinfo["_id"])
+    
+#     myfish = userinfo['fishinfo']
+#     myfish.append(str(fishinfo["_id"]))   
+    
+#     db.user.update_one({'_id': ObjectId(user_id)}, {"$set":{'fishinfo': myfish}})
+#     return jsonify({'message': '냠냠', 'user':user, "fishinfo": fishinfo})
 
 
 
 # if __name__ == '__main__':
-#     app.run('127.0.0.1', port=5000, debug=True)
+#     app.run('0.0.0.0', port=5000, debug=True)
+
